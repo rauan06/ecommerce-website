@@ -23,7 +23,7 @@ class product(models.Model):
     price = models.IntegerField()
     image = models.ImageField(upload_to='homepages/static/dist/img')
 
-    category = models.ManyToManyField(product_category)
+    # category = models.ManyToManyField(product_category)
     
     """Product changes dates"""
     created_at = models.DateTimeField(auto_now_add = True)
