@@ -2,8 +2,7 @@ from django.db import models
 
 class product_category(models.Model):
     """Category description"""
-    name = models.CharField(max_length=50, primary_key = True)
-    product = models.ManyToManyField('product', related_name='name')
+    name = models.CharField(max_length=50, unique=True)
 
     """Category changes dates"""
     created_at = models.DateTimeField(auto_now_add = True)
@@ -23,6 +22,8 @@ class product(models.Model):
     desc = models.TextField()
     price = models.IntegerField()
     image = models.ImageField(upload_to='homepages/static/dist/img')
+
+    category = models.ManyToManyField(product_category)
     
     """Product changes dates"""
     created_at = models.DateTimeField(auto_now_add = True)
@@ -30,7 +31,6 @@ class product(models.Model):
     deleted_at = models.DateTimeField(auto_now_add = True)
 
     """Product Rels"""
-    category = models.ManyToManyField("product_category", related_name='name')
     
     def __str__(self):
         return self.name[:50] + ' ...'
