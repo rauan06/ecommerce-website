@@ -20,11 +20,11 @@
         <!-- Navigation-->
         <nav class="navbar navb navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
-                <a class="navbar-brand" href="#!">One Piece</a>
+                <a class="navbar-brand" href="{% url 'homepages:index' %}">One Piece</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'homepages:index' %}">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Men</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Women</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Accessories</a></li>
@@ -61,7 +61,7 @@
 
 
 <footer class="py-5 bg-dark">
-    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; One Piece  {% now "Y" %}</p></div>
 </footer>
 <!-- Bootstrap core JS-->
 <!-- Core theme JS-->

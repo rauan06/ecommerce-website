@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load mathfilters %}
+
+{% block content %}
+    <!-- Product details -->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="../{{ product.image|cut:"homepages/" }}" alt="{{ product.name }}">
+                </div>
+                <div class="col-lg-6 d-flex align-items-center">
+                    <div class="text">
+                        <h1 class="fw-bolder">{{ product.name }}</h1>
+                        <div class="d-flex justify-content-center small text-warning mb-2">
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                            <div class="bi-star-fill"></div>
+                        </div>
+                        {% if product.discount_set.all %}
+                            {% for discount in product.discount_set.all %}
+                                {% if discount.active %}
+                                    <h2 style="text-center text-lg-start">{{ product.price|mul:discount.discount_percent|intdiv:100 }} &#8376; 
+                                        <span class="text-muted text-decoration-line-through">{{ product.price }} &#8376;</span></h2>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <h2>{{ product.price }} &#8376;</h2>
+                        {% endif %}
+                        <p class="lead"> {{ product.desc }}</p>
+                        <div class="mt-4">
+                            <a href="#" class="btn btn-outline-dark">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
