@@ -1,5 +1,5 @@
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse
 from .models import product, discount
 
@@ -10,3 +10,11 @@ def index(request):
     context = {'products' : products}
     
     return render(request, 'index.html', context)
+
+
+def single(request, product_id):
+    item = get_object_or_404(product, id=product_id)
+    
+    context = {'product' : item}
+
+    return render(request, 'single.html', context)
