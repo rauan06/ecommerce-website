@@ -21,7 +21,7 @@ class product(models.Model):
     name = models.CharField(max_length = 100)
     desc = models.TextField()
     price = models.IntegerField()
-    image = models.ImageField(upload_to='homepages/static/dist/img')
+    image = models.ImageField(upload_to='homepages/static/images')
 
     product_category = models.ManyToManyField(product_category)
     
