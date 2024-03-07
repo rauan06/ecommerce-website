@@ -6,11 +6,6 @@ class Cart(forms.Form):
     sizes = forms.ChoiceField(label="",  label_suffix=" ", widget=forms.RadioSelect(attrs={'class':'btn-check'}), choices=SIZE_CHOICES)
     quantity = forms.IntegerField(label=" ",  label_suffix=" ", widget=forms.NumberInput())
 
-# class TopicForm(forms.ModelForm):
-#     class Meta:
-#         model = Topic
-#         fields = ['text']
-#         labels = {'text' : ''}
 
 
 
