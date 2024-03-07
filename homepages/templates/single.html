@@ -32,16 +32,16 @@
                             <h2>{{ product.price }} &#8376;</h2>
                         {% endif %}
                         <p class="lead"> {{ product.desc }}</p>
-                        <form action="#" method="post" class="row g-2 align-items-center">
+                        <form action="{% url 'homepages:cart'%}" method="post" class="row g-2 align-items-center">
                             {% csrf_token %}
                             <div class="col-auto">
                                 <div class="btn-group" role="group">
-                                    <input type="radio" id="size_x" name="size" value="X" class="btn-check" autocomplete="off">
-                                    <label class="btn btn-outline-dark" for="size_x">X</label>
-                                    <input type="radio" id="size_xs" name="size" value="XS" class="btn-check" autocomplete="off">
-                                    <label class="btn btn-outline-dark" for="size_xs">XS</label>
+                                    <input type="radio" id="size_s" name="size" value="S" class="btn-check" autocomplete="off">
+                                    <label class="btn btn-outline-dark" for="size_s">S</label>
                                     <input type="radio" id="size_m" name="size" value="M" class="btn-check" autocomplete="off">
                                     <label class="btn btn-outline-dark" for="size_m">M</label>
+                                    <input type="radio" id="size_l" name="size" value="L" class="btn-check" autocomplete="off">
+                                    <label class="btn btn-outline-dark" for="size_l">L</label>
                                     <!-- Add more size buttons as needed -->
                                 </div>
                             </div>

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Header -->
+
+    <!-- Cart Table -->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    {% if cart_items %}
+                    <thead>
+                        <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.price }} &#8376</td>
+                            <td>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" class="form-control">
+                                </form>
+                            </td>
+                            <td>{{ item.total }} &#8376</td>
+                            <td>
+                                <a href="#" class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <thead>
+                        <h1>Your cart is empty</h1> 
+                    </thead>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

@@ -23,6 +23,18 @@ def single(request, product_id):
 def collections(request, category_name):
     items = product_category.objects.get(name = category_name).product_set.all()
 
-    context = {'products' : items.order_by('-modified_at')}
+    context = {'products' : items.order_by('-modified_at'), 'title' : category_name}
 
     return render(request, 'collections.html', context)
+
+
+def cart(request):
+    context = {'cart_items' : ''} 
+    
+
+    return render(request, 'cart.html', context)
+
+
+def add_cart(request):
+    pass
+    

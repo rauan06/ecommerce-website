@@ -1,3 +1,4 @@
+from django.contrib.sessions.backends.db import SessionStore
 from django.db import models
 
 class product_category(models.Model):
@@ -66,3 +67,5 @@ class product_inventory(models.Model):
 
     def __str__(self):
         return str(self.quantity) + " - " + self.product_name.name
+    
+
