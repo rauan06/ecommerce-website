@@ -19,17 +19,18 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{cart_items}}
                         {% for item in cart_items %}
                         <tr>
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.price }} &#8376</td>
+                            <td>{{ item }}</td>
+                            <td>{{ item.quantity }} &#8376</td>
                             <td>
                                 <form method="post">
                                     {% csrf_token %}
                                     <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" class="form-control">
                                 </form>
                             </td>
-                            <td>{{ item.total }} &#8376</td>
+                            <td>{{ item.size }} &#8376</td>
                             <td>
                                 <a href="#" class="btn btn-danger">Remove</a>
                             </td>

@@ -44,7 +44,7 @@
                                             <div class="bi-star-fill"></div>
                                         </div>
                                         {% if discount.active %}
-                                            {{ 100|sub:discount.discount_percent|mul:product.price|intdiv:100 }} &#8376
+                                            {{ 100|sub:discount.discount_percent|mul:product.price|intdiv:1000|mul:10 }} &#8376
                                             <span class="text-muted text-decoration-line-through">{{ product.price }} &#8376 </span>
                                         {% else %}
                                             {{ product.price }} &#8376

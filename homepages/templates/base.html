@@ -28,6 +28,7 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'homepages:collections' 'Men' %}">Men</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homepages:collections' 'Women' %}">Women</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homepages:collections' 'All items' %}">Sale</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'homepages:logout_view' %}">LOGOUT</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -46,7 +47,8 @@
                             <a class="nav-link active" href="#!">Register</a>
                         </li>
                     </ul>
-                    <form class="d-flex" action="{% url 'homepages:cart'%}">
+                    <form class="d-flex" action="{% url 'homepages:cart'%}" method="get">
+                        {% csrf_token %}
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
