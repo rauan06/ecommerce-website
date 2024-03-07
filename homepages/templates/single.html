@@ -34,23 +34,25 @@
                         <p class="lead"> {{ product.desc }}</p>
                         <form action="{% url 'homepages:cart'%}" method="post" class="row g-2 align-items-center">
                             {% csrf_token %}
-                            <div class="col-auto">
-                                <div class="btn-group" role="group">
-                                    <input type="radio" id="size_s" name="size" value="S" class="btn-check" autocomplete="off">
-                                    <label class="btn btn-outline-dark" for="size_s">S</label>
-                                    <input type="radio" id="size_m" name="size" value="M" class="btn-check" autocomplete="off">
-                                    <label class="btn btn-outline-dark" for="size_m">M</label>
-                                    <input type="radio" id="size_l" name="size" value="L" class="btn-check" autocomplete="off">
-                                    <label class="btn btn-outline-dark" for="size_l">L</label>
+                                    {% for field in form %}
+                                    <div class="col-auto">
+                                        {% if field.field.choices %}
+                                            <div class="btn-group" role="group">
+                                            {% for choice in field.field.choices %}
+                                                <input type="radio" id="{{choice.1}}" name="size" value="{{choice.0}}" class="btn-check" autocomplete="off">
+                                                <label class="btn btn-outline-dark" for="{{choice.1}}">{{choice.1}}</label>
+                                            {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                            <input type="number" name="quantity" class="form-control" value="1" min="1" max="10" style="width: 80px;">
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
                                     <!-- Add more size buttons as needed -->
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <input type="number" name="quantity" class="form-control" value="1" min="1" max="10" style="width: 80px;">
-                            </div>
-                            <div class="col-auto">
-                                <button type="submit" class="btn btn-outline-dark">Add to cart</button>
-                            </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-outline-dark">Add to cart</button>
+                                    </div>
                         </form>
                     </div>
                 </div>

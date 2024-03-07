@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import product, product_category
+from .forms import Cart
 
 # Create your views here.
 def index(request):
@@ -14,8 +15,9 @@ def index(request):
 
 def single(request, product_id):
     item = get_object_or_404(product, id=product_id)
+    form = Cart()
     
-    context = {'product' : item}
+    context = {'product' : item, 'form' : form}
 
     return render(request, 'single.html', context)
 
@@ -29,12 +31,16 @@ def collections(request, category_name):
 
 
 def cart(request):
-    context = {'cart_items' : ''} 
-    
+    context = {'cart_items' : request.session['cart_items']} 
 
     return render(request, 'cart.html', context)
 
 
 def add_cart(request):
-    pass
+    request.session['cart_items'] = {
+        'name':'',
+        'price':'',
+        'quantity':''
+    }
+
     
