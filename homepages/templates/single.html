@@ -22,7 +22,7 @@
                             <h2>{{ product.price }} &#8376;</h2>
                         {% endif %}
                         <p class="lead"> {{ product.desc }}</p>
-                        <form action="{% url 'homepages:add_cart' product.id %}" method="post" class="row g-2 align-items-center">
+                        <form action="{% url 'homepages:add_cart' product.id %}" method="get" class="row g-2 align-items-center">
                             {% csrf_token %}
                                     {% for field in form %}
                                     {% if field.errors %}

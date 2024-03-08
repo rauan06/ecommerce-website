@@ -53,25 +53,25 @@ def add_cart(request, product_id):
     # Adds items to request.session['cart_items'], in fact, this is our cart
     item = get_object_or_404(product, id=product_id)
 
-    if request.method != 'POST':
+    if request.method != 'GET':
         form = Cart()
     else:
-        form = Cart(request.POST)
+        form = Cart(request.GET)
         if form.is_valid():
             cart_items = request.session.get('cart_items', {})  # Get cart_items from session or create an empty dict
             
-            if str(product_id)  + request.POST['sizes'] in cart_items:
-                cart_items[str(product_id)  + request.POST['sizes']]['quantity'] += int(request.POST['quantity'])
+            if str(product_id)  + request.GET['sizes'] in cart_items:
+                cart_items[str(product_id)  + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
             else:
-                cart_items[str(product_id)  + request.POST['sizes']] = { # Creating 2 dimensional array with index [product_id + size]
+                cart_items[str(product_id)  + request.GET['sizes']] = { # Creating 2 dimensional array with index [product_id + size]
                     'id': product_id,
                     'name' : item.name,
                     'image': str(item.image),
                     'price' : item.price,
                     'discount' : int(item.discount.discount_percent),
                     'discount_active' : item.discount.active,
-                    'size': request.POST['sizes'],
-                    'quantity': int(request.POST['quantity']),
+                    'size': request.GET['sizes'],
+                    'quantity': int(request.GET['quantity']),
                 }
             request.session['cart_items'] = cart_items  # Update cart_items in session
             return HttpResponseRedirect(reverse('homepages:cart'))
@@ -91,3 +91,17 @@ def remove_cart_item(request, key):
         return Http404  # User tried to enter link directly
     
     return HttpResponseRedirect(reverse('cart.html'))
+
+
+def update_total(request, key):
+    # Handling excepetions
+    try:
+        if 'cart_items' in request.session and key in request.session['cart_items']:
+            request.session['cart_items'][key]['quantity'] = request.GET['quantity']
+            request.session.modified = True
+            return render(request, 'cart.html', {'cart_items':request.session['cart_items']})
+    except KeyError:
+        return Http404  # User tried to enter link directly
+    
+    return HttpResponseRedirect(reverse('cart.html'))
+    

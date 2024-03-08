@@ -36,11 +36,10 @@
                     {% endif %}
                     &#8376;
                   </td>
+                  <form method="get" action="{% url 'homepages:update_total' key %}">
+                    {% csrf_token %}
                   <td>
-                    <form method="post">
-                      {% csrf_token %}
-                      <input type="number" name="quantity" value="{{ value.quantity }}" min="1" max="100" class="form-control form-control-sm" style="width: 80px;">
-                    </form>
+                      <input type="number" name="quantity" value="{{ value.quantity }}" min="1" max="100" class="form-control form-control-sm" style="width: 80px;" oninput="calc()">
                   </td>
                   <td class="text-right">
                     {% if value.discount_active %}
@@ -51,16 +50,18 @@
                     &#8376;
                   </td>
                   <td>
+                      <input type="submit" class="btn btn-sm btn-primary" value="Update total" />
                       <a href="{% url 'homepages:remove_cart_item' key %}" class="btn btn-sm btn-danger">Remove</a>
                   </td>
                 </tr>
+              </form>
               {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
-                  <th colspan="2">Total: </th>
+                  <th colspan="2"></th>
                   <th class="text-right"></th>
-                  <th class="text-right">0 &#8376;</th>
+                  <th class="text-right"></th>
                   <th class="text-right">
                     <a href="#" class="btn btn-sm btn-primary">Checkout</a>
                     <a href="{% url 'homepages:logout_view' %}" class="btn btn-sm btn-danger">Remove all</a>
