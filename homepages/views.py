@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from .models import product, product_category
 from .forms import Cart
@@ -79,3 +79,15 @@ def add_cart(request, product_id):
     context = {'product': item, 'form': form}
     return render(request, 'single.html', context)
 
+
+def remove_cart_item(request, key):
+    # Handling excepetions
+    try:
+        if 'cart_items' in request.session and key in request.session['cart_items']:
+            del request.session['cart_items'][key]
+            request.session.modified = True
+            return render(request, 'cart.html', {'cart_items':request.session['cart_items']})
+    except KeyError:
+        return Http404  # User tried to enter link directly
+    
+    return HttpResponseRedirect(reverse('cart.html'))

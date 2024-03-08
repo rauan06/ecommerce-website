@@ -21,7 +21,7 @@
                 <tr>
                   <td>
                     <div class="d-flex align-items-center">
-                      <img src="{{ value.image|cut:'homepages/' }}" alt="{{ value.name }}" style="height: 100px; object-fit: cover; margin-right: 10px;">
+                      <img src="../{{ value.image|cut:'homepages/' }}" alt="{{ value.name }}" style="height: 100px; object-fit: cover; margin-right: 10px;">
                       <div class="text-left">
                         <p class="mb-1">{{ value.name }}</p>
                         <p class="text-muted mb-0">Size: {{ value.size|upper }}</p>
@@ -51,7 +51,7 @@
                     &#8376;
                   </td>
                   <td>
-                    <a href="#" class="btn btn-sm btn-danger">Remove</a>
+                      <a href="{% url 'homepages:remove_cart_item' key %}" class="btn btn-sm btn-danger">Remove</a>
                   </td>
                 </tr>
               {% endfor %}
