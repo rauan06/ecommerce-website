@@ -44,15 +44,14 @@ def collections(request, category_name):
 
 def cart(request):
     # Gets the values from request.session['cart_items'], and gives it to the cart page
-    total = 0
-    
-    for values in request.session['cart_items']:
-        if request.session['cart_items'][values]['discount_active']:
-            total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
-        else:
-            total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
-
     if 'cart_items' in request.session:
+        total = 0
+        
+        for values in request.session['cart_items']:
+            if request.session['cart_items'][values]['discount_active']:
+                total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
+            else:
+                total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
         return render(request, 'cart.html', {'cart_items':request.session['cart_items'], 'total' : total})
     return render(request, 'cart.html', {'cart_items':''})
 
