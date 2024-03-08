@@ -47,7 +47,7 @@
                             <a class="nav-link active" href="#!">Register</a>
                         </li>
                     </ul>
-                    <form class="d-flex" action="{% url 'homepages:cart'%}" method="get">
+                    <form class="d-flex" action="{% url 'homepages:cart' %}" method="get">
                         {% csrf_token %}
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>

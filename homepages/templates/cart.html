@@ -60,8 +60,8 @@
             <tfoot>
                 <tr>
                   <th colspan="2"></th>
-                  <th class="text-right"></th>
-                  <th class="text-right"></th>
+                  <th class="text-right">Total:</th>
+                  <th class="text-right">{{total|floatformat:2}} &#8376;</th>
                   <th class="text-right">
                     <a href="#" class="btn btn-sm btn-primary">Checkout</a>
                     <a href="{% url 'homepages:logout_view' %}" class="btn btn-sm btn-danger">Remove all</a>
