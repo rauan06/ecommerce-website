@@ -19,14 +19,11 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for product in products %}
-                {% if product.discount_set.all %}
-                    {% for discount in product.discount_set.all %}
+                    {% if product.discount.active %}
                         <div class="col mb-5">
                             <div class="card h-100">
                                 <!-- Sale badge-->
-                                {% if discount.active %}
                                     <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                                {% endif %}
                                 <!-- Product image-->
                                 <img class="card-img-top" src="../{{ product.image|cut:"homepages/" }}" alt="..." style="max-height: 250px; object-fit: contain; margin: auto;">
                                 <!-- Product details-->
@@ -42,12 +39,8 @@
                                             <div class="bi-star-fill"></div>
                                             <div class="bi-star-fill"></div>
                                         </div>
-                                        {% if discount.active %}
-                                            {{ product.price|mul:discount.discount_percent|intdiv:100 }} &#8376
+                                        {{ 100|sub:product.discount.discount_percent|mul:product.price|intdiv:1000|mul:10 }} &#8376
                                             <span class="text-muted text-decoration-line-through">{{ product.price }} &#8376 </span>
-                                        {% else %}
-                                            {{ product.price }} &#8376
-                                        {% endif %}
                                     </div>
                                 </div>
                                 <!-- Product actions-->
@@ -56,7 +49,6 @@
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
                 {% else %}
                     <div class="col mb-5">
                         <div class="card h-100">

@@ -1,49 +1,84 @@
 {% extends 'base.html' %}
+{% load mathfilters %}
 
 {% block content %}
-    <!-- Header -->
-
-    <!-- Cart Table -->
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    {% if cart_items %}
-                    <thead>
-                        <tr>
-                            <th scope="col">Product</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{cart_items}}
-                        {% for item in cart_items %}
-                        <tr>
-                            <td>{{ item }}</td>
-                            <td>{{ item.quantity }} &#8376</td>
-                            <td>
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" class="form-control">
-                                </form>
-                            </td>
-                            <td>{{ item.size }} &#8376</td>
-                            <td>
-                                <a href="#" class="btn btn-danger">Remove</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+  <section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          {% if cart_items %}
+            <thead>
+              <tr>
+                <th scope="col" style="width: 300px;">Product</th>
+                <th scope="col" class="text-right">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col" class="text-right">Total</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key, value in cart_items.items %}
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img src="{{ value.image|cut:'homepages/' }}" alt="{{ value.name }}" style="height: 100px; object-fit: cover; margin-right: 10px;">
+                      <div class="text-left">
+                        <p class="mb-1">{{ value.name }}</p>
+                        <p class="text-muted mb-0">Size: {{ value.size|upper }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    {% if value.discount_active %}
+                        {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|floatformat:2 }}
                     {% else %}
-                    <thead>
-                        <h1>Your cart is empty</h1> 
-                    </thead>
+                      {{ value.price|floatformat:2 }}
                     {% endif %}
-                </table>
-            </div>
-        </div>
-    </section>
+                    &#8376;
+                  </td>
+                  <td>
+                    <form method="post">
+                      {% csrf_token %}
+                      <input type="number" name="quantity" value="{{ value.quantity }}" min="1" max="100" class="form-control form-control-sm" style="width: 80px;">
+                    </form>
+                  </td>
+                  <td class="text-right">
+                    {% if value.discount_active %}
+                        {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|mul:value.quantity|floatformat:2 }}
+                    {% else %}
+                      {{ value.price|mul:value.quantity|floatformat:2 }}
+                    {% endif %}
+                    &#8376;
+                  </td>
+                  <td>
+                    <a href="#" class="btn btn-sm btn-primary">Update total</a>
+                    <a href="#" class="btn btn-sm btn-danger">Remove</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                  <th colspan="2">Total: </th>
+                  <th class="text-right"></th>
+                  <th class="text-right">0 &#8376;</th>
+                  <th class="text-right">
+                    <a href="#" class="btn btn-sm btn-primary">Checkout</a>
+                    <a href="{% url 'homepages:logout_view' %}" class="btn btn-sm btn-danger">Remove all</a>
+                  </th>
+                </tr>
+              </tfoot>
+          {% else %}
+            <thead>
+              <tr>
+                <td colspan="5" class="text-center py-5">
+                  <h1>Your cart is empty</h1>
+                </td>
+              </tr>
+            </thead>
+          {% endif %}
+        </table>
+      </div>
+    </div>
+  </section>
 {% endblock content %}

@@ -53,26 +53,31 @@ def cart(request):
 def add_cart(request, product_id):
     # Adds items to request.session['cart_items'], in fact, this is our cart
     item = get_object_or_404(product, id=product_id)
+    print(item.discount)
 
-    if request.method == 'POST':
+    if request.method != 'POST':
+        form = Cart()
+    else:
         form = Cart(request.POST)
         if form.is_valid():
             cart_items = request.session.get('cart_items', {})  # Get cart_items from session or create an empty dict
             
-            if str(product_id) in cart_items:
-                cart_items[str(product_id)]['quantity'] += int(request.POST['quantity'])
+            if str(product_id)  + request.POST['sizes'] in cart_items:
+                cart_items[str(product_id)  + request.POST['sizes']]['quantity'] += int(request.POST['quantity'])
             else:
-                cart_items[str(product_id)] = {
+                cart_items[str(product_id)  + request.POST['sizes']] = { # Creating 2 dimensional array with index [product_id + size]
                     'id': product_id,
+                    'name' : item.name,
+                    'image': str(item.image),
+                    'price' : item.price,
+                    'discount' : int(item.discount.discount_percent),
+                    'discount_active' : item.discount.active,
                     'size': request.POST['sizes'],
                     'quantity': int(request.POST['quantity']),
                 }
             request.session['cart_items'] = cart_items  # Update cart_items in session
             return HttpResponseRedirect(reverse('homepages:cart'))
-    else:
-        form = Cart()
 
     context = {'product': item, 'form': form}
     return render(request, 'single.html', context)
 
-    

@@ -28,7 +28,6 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'homepages:collections' 'Men' %}">Men</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homepages:collections' 'Women' %}">Women</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homepages:collections' 'All items' %}">Sale</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'homepages:logout_view' %}">LOGOUT</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -38,6 +37,7 @@
                                 <li><a class="dropdown-item" href="{% url 'homepages:collections' 'All items' %}">New Arrivals</a></li>
                             </ul>
                         </li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'homepages:logout_view' %}">CLEAR COOKIES</a></li>
                     </ul>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -60,8 +60,8 @@
         </nav>
 
 {% block content %}{% endblock content %}
-
-<!-- Bootstrap core JS-->
-<!-- Core theme JS-->
+<footer class="py-5 bg-dark">
+  <div class="container"><p class="m-0 text-center text-white">Copyright &copy; One Piece {% now "Y" %}</p></div>
+</footer>
 </body>
 </html>
