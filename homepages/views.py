@@ -45,7 +45,6 @@ def collections(request, category_name):
 def cart(request):
     # Gets the values from request.session['cart_items'], and gives it to the cart page
     if 'cart_items' in request.session:
-        print(request.session['cart_items'])
         return render(request, 'cart.html', {'cart_items':request.session['cart_items']})
     return render(request, 'cart.html', {'cart_items':''})
 
@@ -53,7 +52,6 @@ def cart(request):
 def add_cart(request, product_id):
     # Adds items to request.session['cart_items'], in fact, this is our cart
     item = get_object_or_404(product, id=product_id)
-    print(item.discount)
 
     if request.method != 'POST':
         form = Cart()
