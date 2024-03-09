@@ -48,4 +48,6 @@ class TestUrls(TestCase):
 
 
 class TestViews(TestCase):
-    pass
+    def test_logout(self): 
+        request = ['poop']
+        

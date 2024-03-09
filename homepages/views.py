@@ -28,7 +28,7 @@ def single(request, product_id):
     item = get_object_or_404(product, id=product_id)
     form = Cart()
     
-    context = {'product' : item, 'form' : form}
+    context = {'product':  item, 'form': form}
 
     return render(request, 'single.html', context)
 
@@ -72,11 +72,11 @@ def add_cart(request, product_id):
             else:
                 cart_items[str(product_id)  + request.GET['sizes']] = { # Creating 2 dimensional array with index [product_id + size]
                     'id': product_id,
-                    'name' : item.name,
+                    'name': item.name,
                     'image': str(item.image),
-                    'price' : item.price,
-                    'discount' : int(item.discount.discount_percent),
-                    'discount_active' : item.discount.active,
+                    'price': item.price,
+                    'discount': int(item.discount.discount_percent),
+                    'discount_active': item.discount.active,
                     'size': request.GET['sizes'],
                     'quantity': int(request.GET['quantity']),
                 }
