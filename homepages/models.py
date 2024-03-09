@@ -66,5 +66,3 @@ class product_inventory(models.Model):
 
     def __str__(self):
         return str(self.quantity) + " - " + self.product_name.name
-    
-
