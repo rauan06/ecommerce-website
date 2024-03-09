@@ -42,5 +42,10 @@ class TestUrls(TestCase):
         self.assertEqual(resolve(url).func, views.remove_cart_item)
 
     def test_update_total(self):
+        """Testing update_total"""
         url = reverse('homepages:update_total', args=['some key'])
         self.assertEqual(resolve(url).func, views.update_total)
+
+
+class TestViews(TestCase):
+    pass
