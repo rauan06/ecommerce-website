@@ -97,7 +97,7 @@ def remove_cart_item(request, key):
     except KeyError:
         return Http404  # User tried to enter link directly
     
-    return HttpResponseRedirect(reverse('cart.html'))
+    return HttpResponseRedirect(reverse('homepages:cart'))
 
 
 def update_total(request, key):
