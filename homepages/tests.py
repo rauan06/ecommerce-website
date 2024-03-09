@@ -3,8 +3,8 @@ from django.urls import reverse, resolve
 from . import  views
 
 # Create your tests here.
-class IndexTest(TestCase):
-    """Testing homepage for index.html"""
+class TestUrls(TestCase):
+    """Testing homepages for urls"""
     
     def test_index(self):
         """Testing index"""
