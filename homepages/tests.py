@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from .models import product, product_category, discount
+from .forms import Cart
 from . import  views
 import json
 
@@ -54,12 +55,18 @@ class TestViews(TestCase):
     def setUp(self):
         """Our virtual setUp for out tests"""  # This function is useful, as it can test our queries without changing the databsae
 
-        # Our urls
+        # Homepages urls
         self.single_url = reverse('homepages:single', args=[1])
         self.collections_url = reverse('homepages:collections', args=['Men'])
         self.cart_url = reverse('homepages:cart')
         self.add_cart = reverse('homepages:add_cart', args=[1])
 
+
+        # Homepages forms
+        self.form_cart = Cart()
+
+
+        # Homepages models
         product_category.objects.create(
             name = "Men"
         )
