@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from .models import product, product_category
-from .forms import Cart
+from .forms import Cart, UpdateCart
 from django.contrib.auth import logout
 
 
@@ -66,7 +66,8 @@ def add_cart(request, product_id):
         form = Cart(request.GET)
         if form.is_valid():
             cart_items = request.session.get('cart_items', {})  # Get cart_items from session or create an empty dict
-            
+            print(cart_items)
+
             if str(product_id)  + request.GET['sizes'] in cart_items:
                 cart_items[str(product_id)  + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
             else:
@@ -102,20 +103,26 @@ def remove_cart_item(request, key):
 
 def update_total(request, key):
     """Handling excepetions"""
-    try:
-        if 'cart_items' in request.session and key in request.session['cart_items']:
-            request.session['cart_items'][key]['quantity'] = request.GET['quantity']
-            request.session.modified = True
-        
-        total = 0
-        for values in request.session['cart_items']:
-            print(values)
-            if request.session['cart_items'][values]['discount_active']:
-                total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
-            else:
-                total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
-        
-        return render(request, 'cart.html', {'cart_items':request.session['cart_items'], 'total' : total})
-    
-    except KeyError:
-        return Http404  # User tried to enter link directly
+    # cart_form = UpdateCart()
+
+    if request.method != "GET":
+        return render(request, 'cart.html')
+        # context = {'cart_form' : cart_form} 
+    else:
+        # if cart_form.is_valid():
+            try:
+                if 'cart_items' in request.session and key in request.session['cart_items']:
+                    request.session['cart_items'][key]['quantity'] = request.GET['quantity']
+                    request.session.modified = True
+                
+                total = 0
+                for values in request.session['cart_items']:
+                    if request.session['cart_items'][values]['discount_active']:
+                        total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
+                    else:
+                        total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
+
+                return render(request, 'cart.html', {'cart_items':request.session['cart_items'], 'total' : total})
+            
+            except KeyError:
+                Http404

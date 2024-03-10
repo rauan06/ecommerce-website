@@ -1,0 +1,15 @@
+Things to be done:
+    - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
+    - Create skip to the main content button (when pressing 'tab').
+    - Create user authentication.
+    - Create checkout method.
+    - Make decorators for checkout.
+    - Create Admin Panel.
+    - Cretate decorators for Admin Panel.
+    - Create order list.
+    - Integrate Google APIs.
+    - Implement payment methods.
+    - Create robots.txt
+    - Make statistics page.
+    - Check for security options on the internet
+    - Upload project to the Internet 
