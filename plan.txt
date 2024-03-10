@@ -1,6 +1,6 @@
 Things to be done:
     - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
-    - Create skip to the main content button (when pressing 'tab').
+    - Create 'skip to the main content' button (when pressing 'tab').
     - Create user authentication.
     - Create checkout method.
     - Make decorators for checkout.
@@ -9,6 +9,7 @@ Things to be done:
     - Create order list.
     - Integrate Google APIs.
     - Implement payment methods.
+    - Implement telegram, gmail bot to send information about order status.
     - Create robots.txt
     - Make statistics page.
     - Check for security options on the internet
