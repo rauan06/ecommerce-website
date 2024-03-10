@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
+from .models import product, product_category, discount
 from . import  views
+import json
 
 # Create your tests here.
 class TestUrls(TestCase):
@@ -13,7 +15,7 @@ class TestUrls(TestCase):
 
     def test_single(self):
         """Testing single"""
-        url = reverse('homepages:single', args=[3])
+        url = reverse('homepages:single', args=[1])
         self.assertEqual(resolve(url).func, views.single)
 
     def test_collections(self):
@@ -48,6 +50,63 @@ class TestUrls(TestCase):
 
 
 class TestViews(TestCase):
-    def test_logout(self): 
-        request = ['poop']
+    """Testing homepages for GET and POST methods"""
+    def setUp(self):
+        """Our virtual setUp for out tests"""  # This function is useful, as it can test our queries without changing the databsae
+
+        # Our urls
+        self.single_url = reverse('homepages:single', args=[1])
+        self.collections_url = reverse('homepages:collections', args=['Men'])
+        self.cart_url = reverse('homepages:cart')
+        self.add_cart = reverse('homepages:add_cart', args=[1])
+
+        product_category.objects.create(
+            name = "Men"
+        )
+
+        product.objects.create(
+            id =  1,
+            name = "One Piece Hat",
+            desc = "",
+            price = 8000,
+            image = "homepages/static/images/one_piece_hat.jpg",
+        )
+
+        product.objects.get(id=1).categories.add(product_category.objects.get(name="Men"))
+
+        discount.objects.create(
+            product_name = product.objects.get(id=1),
+            discount_percent = 25.00,
+            active = True,
+        )
+
+    def test_single_views(self):
+        """Testing single's view function"""
+        response = self.client.get(self.single_url) 
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'single.html')
+        self.assertContains(response, "/static/images/one_piece_hat.jpg")
+
+    def test_collections_views(self):
+        """Testing collections' view function"""
+        response = self.client.get(self.collections_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'collections.html')
+        self.assertContains(response, "6000")
         
+    def test_cart_empty_views(self):
+        """Testing empty cart's view function"""
+        response = self.client.get(self.cart_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Your cart is empty")
+
+    def test_add_cart_views(self):
+        """Testing add_cart's view function"""
+        response = self.client.get(self.add_cart)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'single.html')
+        self.assertContains(response, "This field is required")
+
+    
+
+    

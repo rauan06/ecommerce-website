@@ -12,7 +12,7 @@ from django.contrib.auth import logout
 def logout_view(request):
     # Deletes all session variables
     logout(request)
-    return HttpResponseRedirect(reverse('homepages:index'))
+    return HttpResponseRedirect(reverse('homepages:cart'))
 
 def index(request):
     # Shows last 10 modified products 
@@ -25,7 +25,7 @@ def index(request):
 
 def single(request, product_id):
     # Single page with simple form
-    item = get_object_or_404(product, id=product_id)
+    item = product.objects.get(id=product_id)
     form = Cart()
     
     context = {'product':  item, 'form': form}
@@ -43,7 +43,7 @@ def collections(request, category_name):
 
 
 def cart(request):
-    # Gets the values from request.session['cart_items'], and gives it to the cart page
+    # Gets the values from request.session['cart_items'], and gives it to the cart page 
     if 'cart_items' in request.session:
         total = 0
         
