@@ -10,12 +10,12 @@ from django.contrib.auth import logout
 # Create your views here.
 
 def logout_view(request):
-    # Deletes all session variables
+    """Deletes all sessions"""
     logout(request)
     return HttpResponseRedirect(reverse('homepages:cart'))
 
 def index(request):
-    # Shows last 10 modified products 
+    """Shows last 10 modified products """
     products = product.objects.all().order_by('-modified_at')[:10]
 
     context = {'products' : products}
@@ -24,7 +24,7 @@ def index(request):
 
 
 def single(request, product_id):
-    # Single page with simple form
+    """Single page with simple form"""
     item = product.objects.get(id=product_id)
     form = Cart()
     
@@ -34,7 +34,7 @@ def single(request, product_id):
 
 
 def collections(request, category_name):
-    # Show items according to the category
+    """Show items according to the category"""
     items = product_category.objects.get(name = category_name).product_set.all()
 
     context = {'products' : items.order_by('-modified_at'), 'title' : category_name}
@@ -43,7 +43,7 @@ def collections(request, category_name):
 
 
 def cart(request):
-    # Gets the values from request.session['cart_items'], and gives it to the cart page 
+    """Gets the values from request.session['cart_items'], and gives it to the cart page""" 
     if 'cart_items' in request.session:
         total = 0
         
@@ -57,7 +57,7 @@ def cart(request):
 
 
 def add_cart(request, product_id):
-    # Adds items to request.session['cart_items'], in fact, this is our cart
+    """Adds items to request.session['cart_items'], in fact, this is our cart"""
     item = get_object_or_404(product, id=product_id)
 
     if request.method != 'GET':
@@ -88,7 +88,7 @@ def add_cart(request, product_id):
 
 
 def remove_cart_item(request, key):
-    # Handling excepetions
+    """Handling excepetions"""
     try:
         if 'cart_items' in request.session and key in request.session['cart_items']:
             del request.session['cart_items'][key]
@@ -101,7 +101,7 @@ def remove_cart_item(request, key):
 
 
 def update_total(request, key):
-    # Handling excepetions
+    """Handling excepetions"""
     try:
         if 'cart_items' in request.session and key in request.session['cart_items']:
             request.session['cart_items'][key]['quantity'] = request.GET['quantity']

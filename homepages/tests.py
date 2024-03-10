@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
 from .models import product, product_category, discount
-from .forms import Cart
 from . import  views
 import json
 
@@ -59,11 +58,8 @@ class TestViews(TestCase):
         self.single_url = reverse('homepages:single', args=[1])
         self.collections_url = reverse('homepages:collections', args=['Men'])
         self.cart_url = reverse('homepages:cart')
-        self.add_cart = reverse('homepages:add_cart', args=[1])
-
-
-        # Homepages forms
-        self.form_cart = Cart()
+        self.add_cart_url = reverse('homepages:add_cart', args=[1])
+        self.add_cart_error_url = reverse('homepages:add_cart', args=[100])
 
 
         # Homepages models
@@ -107,13 +103,18 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Your cart is empty")
 
-    def test_add_cart_views(self):
-        """Testing add_cart's view function"""
-        response = self.client.get(self.add_cart)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'single.html')
-        self.assertContains(response, "This field is required")
+    def test_add_cart_blank(self):
+        """Testing add_cart when recieved nothing """
+        response = self.client.get(self.add_cart_error_url)
+        self.assertEqual(response.status_code, 404)
 
-    
+    def test_add_cart_GET(self):
+        """Testing add_cart for GET"""
+        response = self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
+        self.assertEqual(response.status_code, 302)
 
+    def test_remove_cart_item(self):
+        pass
     
+    def test_update_total(self):
+        pass
