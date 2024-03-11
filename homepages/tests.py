@@ -129,7 +129,6 @@ class TestViews(TestCase):
         """Testing add_cart for GET"""
         response = self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed(response, "cart.html")
 
     def test_remove_cart_item_views_with_error(self):
         """Testing remove_cart_item's view function with error"""

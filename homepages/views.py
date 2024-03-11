@@ -12,6 +12,8 @@ from django.contrib.auth import logout
 def logout_view(request):
     """Deletes all sessions"""
     logout(request)
+    request.session['quantity'] = 0
+    request.session.modified = True
     return HttpResponseRedirect(reverse('homepages:cart'))
 
 def index(request):
@@ -69,7 +71,12 @@ def add_cart(request, product_id):
             print(cart_items)
 
             if str(product_id)  + request.GET['sizes'] in cart_items:
+                if cart_items[str(product_id)  + request.GET['sizes']]['quantity'] + int(request.GET['quantity'])> 100:
+                    form.add_error('sizes', "Item is already in your cart")
+                    context = {'product': item, 'form': form}
+                    return render(request, 'single.html', context)
                 cart_items[str(product_id)  + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
+                request.session['quantity'] += int(request.GET['quantity'])
             else:
                 cart_items[str(product_id)  + request.GET['sizes']] = { # Creating 2 dimensional array with index [product_id + size]
                     'id': product_id,
@@ -81,6 +88,7 @@ def add_cart(request, product_id):
                     'size': request.GET['sizes'],
                     'quantity': int(request.GET['quantity']),
                 }
+                request.session['quantity'] = int(request.GET['quantity'])
             request.session['cart_items'] = cart_items  # Update cart_items in session
             return HttpResponseRedirect(reverse('homepages:cart'))
 
@@ -91,6 +99,7 @@ def add_cart(request, product_id):
 def remove_cart_item(request, key):
     """Handling excepetions"""
     if 'cart_items' in request.session and key in request.session['cart_items']:
+        request.session['quantity'] -= request.session['cart_items'][key]['quantity']
         del request.session['cart_items'][key]
         request.session.modified = True
         return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
@@ -113,8 +122,10 @@ def update_total(request, key):
             try:
                 if 'cart_items' in request.session and key in request.session['cart_items']:
                     request.session['cart_items'][key]['quantity'] = request.GET['quantity']
+                    request.session['quantity'] -= request.session['cart_items'][key]['quantity']
+                    request.session['quantity'] += request.GET['quantity']
                     request.session.modified = True
-                
+                    
                 total = 0
                 for values in request.session['cart_items']:
                     if request.session['cart_items'][values]['discount_active']:
