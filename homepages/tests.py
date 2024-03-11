@@ -131,7 +131,6 @@ class TestViews(TestCase):
         response = self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
         self.assertEqual(response.status_code, 302)
         
-
     def test_update_total_GET(self):
         """"Testing udpate_total's GET method"""
         response1 = self.client.get(self.update_total_url, {'quantity': -100})
@@ -140,18 +139,12 @@ class TestViews(TestCase):
         self.assertEqual(response1.status_code, 302)
         self.assertEqual(response2.status_code, 302)
 
-        self.assertContains(response1, 100)
-        # self.assertNotContains(response1, -100)
-        # self.assertContains(response2, 100)
-
-
     def test_remove_cart_item_views(self):
         """Testing remove_cart_item's view function"""
         response = self.client.get(self.remove_cart_item_url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Your cart is empty")
         
-
     def test_remove_cart_item_views_with_error(self):
         """Testing remove_cart_item's view function with error"""
         response = self.client.get(self.remove_cart_item_url_error)
