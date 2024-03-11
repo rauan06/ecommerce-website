@@ -1,5 +1,4 @@
 Things to be done:
-    - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
     - Create 'skip to the main content' button (when pressing 'tab').
     - Add REST API, learn how it works
     - Create user authentication.
@@ -15,3 +14,11 @@ Things to be done:
     - Make statistics page.
     - Check for security options on the internet
     - Upload project to the Internet 
+
+
+Things in proccess:
+    - Create 'skip to the main content' button (when pressing 'tab').
+
+
+Things alread done:
+    - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
