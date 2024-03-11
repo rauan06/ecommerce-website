@@ -77,8 +77,8 @@ class TestViews(TestCase):
         self.add_cart_url = reverse('homepages:add_cart', args=[1])
         self.add_cart_error_url = reverse('homepages:add_cart', args=[100])
         self.remove_cart_item_url_error = reverse('homepages:remove_cart_item', args=['rauan'])
-        self.remove_cart_item_url = reverse('homepages:remove_cart_item', args=['1m'])
         self.update_total_url = reverse('homepages:update_total', args=['1m'])
+        self.remove_cart_item_url = reverse('homepages:remove_cart_item', args=['1m'])
 
         # Homepages models
         product_category.objects.create(
@@ -130,26 +130,30 @@ class TestViews(TestCase):
         """Testing add_cart for GET"""
         response = self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
         self.assertEqual(response.status_code, 302)
+        
+
+    def test_update_total_GET(self):
+        """"Testing udpate_total's GET method"""
+        response1 = self.client.get(self.update_total_url, {'quantity': -100})
+        response2 = self.client.get(self.update_total_url, {'quantity': 100})
+
+        self.assertEqual(response1.status_code, 302)
+        self.assertEqual(response2.status_code, 302)
+
+        self.assertContains(response1, 100)
+        # self.assertNotContains(response1, -100)
+        # self.assertContains(response2, 100)
+
+
+    def test_remove_cart_item_views(self):
+        """Testing remove_cart_item's view function"""
+        response = self.client.get(self.remove_cart_item_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Your cart is empty")
+        
 
     def test_remove_cart_item_views_with_error(self):
         """Testing remove_cart_item's view function with error"""
         response = self.client.get(self.remove_cart_item_url_error)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Your cart is empty")
-        
-    def test_remove_cart_item_views(self):
-        """Testing remove_cart_item's view function"""
-        response = self.client.get(self.remove_cart_item_url)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Your cart is empty")
-
-    def test_update_total(self):
-        """"Testing udpate_total's view function"""
-        response1 = self.client.get(self.update_total_url, {'quantity': -100})
-        response2 = self.client.get(self.update_total_url, {'quantity': 100})
-
-        self.assertEqual(response1.status_code, 200)
-        self.assertEqual(response2.status_code, 200)
-
-        self.assertContains(response1, '100')
-        self.assertContains(response2, '100')

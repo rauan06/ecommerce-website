@@ -130,5 +130,4 @@ def update_total(request, key):
 
             return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
         
-        else:
-            return render(request, 'cart.html', {'cart_items': ''})
+        return HttpResponseRedirect(reverse('homepages:cart'))
