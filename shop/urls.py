@@ -24,4 +24,5 @@ admin.site.index_title = 'Will become the Priate King'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('homepages.urls', namespace='homepages')),
+    path('users/', include('users.urls', namespace='users'))
 ]
