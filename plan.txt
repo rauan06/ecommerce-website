@@ -1,10 +1,10 @@
 Things to be done:
     - Add REST API, learn how it works
+    - Integrate Google APIs.
     - Make decorators for checkout.
     - Create Admin Panel.
     - Cretate decorators for Admin Panel.
     - Create order list.
-    - Integrate Google APIs.
     - Implement payment methods.
     - Implement telegram, gmail bot to send information about order status.
     - Create robots.txt
@@ -13,12 +13,11 @@ Things to be done:
     - Upload project to the Internet 
 
 
-Things in proccess:
+Things in progress:
     - Create user authentication.
     - Create checkout method.
     
 
-Things alread done:
+Things already done:
     - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
     - Create 'skip to the main content' button (when pressing 'tab').
-    
