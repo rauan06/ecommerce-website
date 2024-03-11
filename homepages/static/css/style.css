@@ -1,0 +1,34 @@
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 10px; /* Adjust according to your design */
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    z-index: 999;
+}
+
+.skip-link a {
+    position: absolute;
+    left: -999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.skip-link a:focus {
+    left: auto;
+    width: auto;
+    height: auto;
+    overflow: auto;
+}
+
+.skip-link a:focus, .skip-link a:hover {
+    left: auto;
+    width: auto;
+    height: auto;
+    overflow: auto;
+    color: #fff;
+    background-color: #333; /* Change the background color on focus or hover */
+    text-decoration: none; /* Remove underline on focus or hover */
+}
