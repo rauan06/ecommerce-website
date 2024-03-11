@@ -33,10 +33,10 @@ class TestUrls(TestCase):
         url = reverse('homepages:add_cart', args=[1])
         self.assertEqual(resolve(url).func, views.add_cart)
 
-    def test_logout(self):
-        """Testing logout"""
-        url = reverse('homepages:logout_view')
-        self.assertEqual(resolve(url).func, views.logout_view)
+    def test_remove_all_cart_items(self):
+        """Testing remove_all_cart_items"""
+        url = reverse('homepages:remove_all_cart_items')
+        self.assertEqual(resolve(url).func, views.remove_all_cart_items)
 
     def test_remove_cart_item(self):
         """Testing remove_cart_item"""

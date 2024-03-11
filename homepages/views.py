@@ -3,13 +3,15 @@ from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from .models import product, product_category
 from .forms import Cart
-from django.contrib.auth import logout
+# from django.contrib.auth import logout
 
 # Create your views here.
 
-def logout_view(request):
+def remove_all_cart_items(request):
     """Logs out the user by deleting all sessions"""
-    logout(request)
+    del request.session['cart_items']
+    del request.session['quantity']
+    request.session.modified = True
     return HttpResponseRedirect(reverse('homepages:cart'))
 
 def index(request):
@@ -59,6 +61,8 @@ def cart(request):
 def add_cart(request, product_id):
     """Adds items to the cart session"""
     item = get_object_or_404(product, id=product_id)
+    if 'quantity' not in request.session:
+        request.session['quantity'] = 0
 
     if request.method != 'GET':
         form = Cart()
@@ -82,7 +86,7 @@ def add_cart(request, product_id):
                     'size': request.GET['sizes'],
                     'quantity': int(request.GET['quantity']),
                 }
-                request.session['quantity'] = int(request.GET['quantity'])
+                request.session['quantity'] += int(request.GET['quantity'])
             request.session['cart_items'] = cart_items  # Update cart_items in session
             return HttpResponseRedirect(reverse('homepages:cart'))
 
