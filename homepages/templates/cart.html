@@ -64,7 +64,7 @@
                   <th class="text-right">Total:</th>
                   <th class="text-right">{{total|floatformat:2}} &#8376;</th>
                   <th class="text-right">
-                    <a href="#" class="btn btn-sm btn-primary">Checkout</a>
+                    <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-primary">Checkout</a>
                     <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-danger">Remove all</a>
                   </th>
                 </tr>
