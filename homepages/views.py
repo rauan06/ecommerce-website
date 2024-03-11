@@ -93,9 +93,12 @@ def remove_cart_item(request, key):
     if 'cart_items' in request.session and key in request.session['cart_items']:
         del request.session['cart_items'][key]
         request.session.modified = True
-        return render(request, 'cart.html', {'cart_items':request.session['cart_items']})
+        return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
     else:
-        raise Http404  # User tried to enter link directly
+        if 'cart_items' in request.session:
+            return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
+        else:
+            return render(request, 'cart.html', {'cart_items': ''})
 
 
 def update_total(request, key):
