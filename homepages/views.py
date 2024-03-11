@@ -5,15 +5,15 @@ from .models import product, product_category
 from .forms import Cart
 from django.contrib.auth import logout
 
-
 # Create your views here.
+
 def logout_view(request):
-    """Deletes all sessions"""
+    """Logs out the user by deleting all sessions"""
     logout(request)
     return HttpResponseRedirect(reverse('homepages:cart'))
 
 def index(request):
-    """Shows last 10 modified products """
+    """Shows last 10 modified products"""
     products = product.objects.all().order_by('-modified_at')[:10]
 
     context = {'products' : products}
@@ -22,7 +22,7 @@ def index(request):
 
 
 def single(request, product_id):
-    """Single page with simple form"""
+    """Renders a single page with a simple form for a specific product"""
     item = product.objects.get(id=product_id)
     form = Cart()
     
@@ -32,30 +32,32 @@ def single(request, product_id):
 
 
 def collections(request, category_name):
-    """Show items according to the category"""
-    items = product_category.objects.get(name = category_name).product_set.all()
+    """Shows items according to the category"""
+    items = product_category.objects.get(name=category_name).product_set.all()
 
-    context = {'products' : items.order_by('-modified_at'), 'title' : category_name}
+    context = {'products': items.order_by('-modified_at'), 'title': category_name}
 
     return render(request, 'collections.html', context)
 
 
 def cart(request):
-    """Gets the values from request.session['cart_items'], and gives it to the cart page""" 
+    """Displays the items stored in the cart session"""
     if 'cart_items' in request.session:
         total = 0
         
         for values in request.session['cart_items']:
+            # Calculate total price considering discounts
             if request.session['cart_items'][values]['discount_active']:
-                total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
+                total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
+                       - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
             else:
                 total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
-        return render(request, 'cart.html', {'cart_items':request.session['cart_items'], 'total' : total})
-    return render(request, 'cart.html', {'cart_items':''})
+        return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
+    return render(request, 'cart.html', {'cart_items': ''})
 
 
 def add_cart(request, product_id):
-    """Adds items to request.session['cart_items'], in fact, this is our cart"""
+    """Adds items to the cart session"""
     item = get_object_or_404(product, id=product_id)
 
     if request.method != 'GET':
@@ -64,11 +66,13 @@ def add_cart(request, product_id):
         form = Cart(request.GET)
         if form.is_valid():
             cart_items = request.session.get('cart_items', {})  # Get cart_items from session or create an empty dict
-            if str(product_id)  + request.GET['sizes'] in cart_items:
-                cart_items[str(product_id)  + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
+            if str(product_id) + request.GET['sizes'] in cart_items:
+                # If the same product in the same size is added again, increase its quantity
+                cart_items[str(product_id) + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
                 request.session['quantity'] += int(request.GET['quantity'])
             else:
-                cart_items[str(product_id)  + request.GET['sizes']] = { # Creating 2 dimensional array with index [product_id + size]
+                # Create a new entry in cart_items for the product
+                cart_items[str(product_id) + request.GET['sizes']] = {
                     'id': product_id,
                     'name': item.name,
                     'image': str(item.image),
@@ -87,13 +91,16 @@ def add_cart(request, product_id):
 
 
 def remove_cart_item(request, key):
-    """Handling excepetions"""
+    """Removes an item from the cart session"""
+    # Check if the key is in the request session
     if 'cart_items' in request.session and key in request.session['cart_items']:
         request.session['quantity'] -= request.session['cart_items'][key]['quantity']
         del request.session['cart_items'][key]
         request.session.modified = True
         return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
+    # Else return cart without any changes
     else:
+        # Check if the cart had items or not 
         if 'cart_items' in request.session:
             return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
         else:
@@ -101,26 +108,27 @@ def remove_cart_item(request, key):
 
 
 def update_total(request, key):
-    """Handling excepetions"""
-
+    """Updates the total price of the cart"""
     if request.method != 'GET':
         return render(request, 'cart.html')
     else:
-            try:
-                if 'cart_items' in request.session and key in request.session['cart_items']:
-                    request.session['quantity'] -= int(request.session['cart_items'][key]['quantity'])
-                    request.session['cart_items'][key]['quantity'] = int(request.GET['quantity'])
-                    request.session['quantity'] += abs(int(request.GET['quantity']))
-                    request.session.modified = True
-                    
-                total = 0
-                for values in request.session['cart_items']:
-                    if request.session['cart_items'][values]['discount_active']:
-                        total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
-                    else:
-                        total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
+        if 'cart_items' in request.session and key in request.session['cart_items']:
+            # Update quantity and total price
+            request.session['quantity'] -= int(request.session['cart_items'][key]['quantity'])
+            request.session['cart_items'][key]['quantity'] = abs(int(request.GET['quantity']))
+            request.session['quantity'] += abs(int(request.GET['quantity']))
+            request.session.modified = True
+                
+            total = 0
+            # Recalculate total price considering discounts
+            for values in request.session['cart_items']:
+                if request.session['cart_items'][values]['discount_active']:
+                    total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
+                           - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
+                else:
+                    total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
 
-                return render(request, 'cart.html', {'cart_items':request.session['cart_items'], 'total' : total})
-            
-            except KeyError:
-                Http404
+            return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
+        
+        else:
+            return render(request, 'cart.html', {'cart_items': ''})

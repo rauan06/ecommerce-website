@@ -78,6 +78,7 @@ class TestViews(TestCase):
         self.add_cart_error_url = reverse('homepages:add_cart', args=[100])
         self.remove_cart_item_url_error = reverse('homepages:remove_cart_item', args=['rauan'])
         self.remove_cart_item_url = reverse('homepages:remove_cart_item', args=['1m'])
+        self.update_total_url = reverse('homepages:update_total', args=['1m'])
 
         # Homepages models
         product_category.objects.create(
@@ -144,3 +145,11 @@ class TestViews(TestCase):
 
     def test_update_total(self):
         """"Testing udpate_total's view function"""
+        response1 = self.client.get(self.update_total_url, {'quantity': -100})
+        response2 = self.client.get(self.update_total_url, {'quantity': 100})
+
+        self.assertEqual(response1.status_code, 200)
+        self.assertEqual(response2.status_code, 200)
+
+        self.assertContains(response1, '100')
+        self.assertContains(response2, '100')
