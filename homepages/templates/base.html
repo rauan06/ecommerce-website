@@ -52,7 +52,13 @@
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">{{ request.session.quantity }}</span>
+                            <span class="badge bg-dark text-white ms-1 rounded-pill">
+                                {% if request.session.quantity %}
+                                    {{ request.session.quantity }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </span>
                         </button>
                     </form>
                 </div>

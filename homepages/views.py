@@ -2,18 +2,14 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from .models import product, product_category
-from .forms import Cart, UpdateCart
+from .forms import Cart
 from django.contrib.auth import logout
 
 
-
 # Create your views here.
-
 def logout_view(request):
     """Deletes all sessions"""
     logout(request)
-    request.session['quantity'] = 0
-    request.session.modified = True
     return HttpResponseRedirect(reverse('homepages:cart'))
 
 def index(request):
@@ -68,13 +64,7 @@ def add_cart(request, product_id):
         form = Cart(request.GET)
         if form.is_valid():
             cart_items = request.session.get('cart_items', {})  # Get cart_items from session or create an empty dict
-            print(cart_items)
-
             if str(product_id)  + request.GET['sizes'] in cart_items:
-                if cart_items[str(product_id)  + request.GET['sizes']]['quantity'] + int(request.GET['quantity'])> 100:
-                    form.add_error('sizes', "Item is already in your cart")
-                    context = {'product': item, 'form': form}
-                    return render(request, 'single.html', context)
                 cart_items[str(product_id)  + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
                 request.session['quantity'] += int(request.GET['quantity'])
             else:
@@ -112,18 +102,15 @@ def remove_cart_item(request, key):
 
 def update_total(request, key):
     """Handling excepetions"""
-    # cart_form = UpdateCart()
 
-    if request.method != "GET":
+    if request.method != 'GET':
         return render(request, 'cart.html')
-        # context = {'cart_form' : cart_form} 
     else:
-        # if cart_form.is_valid():
             try:
                 if 'cart_items' in request.session and key in request.session['cart_items']:
-                    request.session['cart_items'][key]['quantity'] = request.GET['quantity']
-                    request.session['quantity'] -= request.session['cart_items'][key]['quantity']
-                    request.session['quantity'] += request.GET['quantity']
+                    request.session['quantity'] -= int(request.session['cart_items'][key]['quantity'])
+                    request.session['cart_items'][key]['quantity'] = int(request.GET['quantity'])
+                    request.session['quantity'] += abs(int(request.GET['quantity']))
                     request.session.modified = True
                     
                 total = 0
