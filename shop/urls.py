@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from homepages import views
 
 admin.site.site_header = 'Luffy'
 admin.site.index_title = 'Will become the Priate King'
