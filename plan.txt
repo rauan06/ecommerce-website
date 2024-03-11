@@ -1,8 +1,5 @@
 Things to be done:
-    - Create 'skip to the main content' button (when pressing 'tab').
     - Add REST API, learn how it works
-    - Create user authentication.
-    - Create checkout method.
     - Make decorators for checkout.
     - Create Admin Panel.
     - Cretate decorators for Admin Panel.
@@ -17,8 +14,11 @@ Things to be done:
 
 
 Things in proccess:
-    - Create 'skip to the main content' button (when pressing 'tab').
-
+    - Create user authentication.
+    - Create checkout method.
+    
 
 Things alread done:
     - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
+    - Create 'skip to the main content' button (when pressing 'tab').
+    
