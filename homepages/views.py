@@ -90,15 +90,12 @@ def add_cart(request, product_id):
 
 def remove_cart_item(request, key):
     """Handling excepetions"""
-    try:
-        if 'cart_items' in request.session and key in request.session['cart_items']:
-            del request.session['cart_items'][key]
-            request.session.modified = True
-            return render(request, 'cart.html', {'cart_items':request.session['cart_items']})
-    except KeyError:
-        return Http404  # User tried to enter link directly
-    
-    return HttpResponseRedirect(reverse('homepages:cart'))
+    if 'cart_items' in request.session and key in request.session['cart_items']:
+        del request.session['cart_items'][key]
+        request.session.modified = True
+        return render(request, 'cart.html', {'cart_items':request.session['cart_items']})
+    else:
+        raise Http404  # User tried to enter link directly
 
 
 def update_total(request, key):

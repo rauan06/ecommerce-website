@@ -55,7 +55,20 @@ class TestViews(TestCase):
         """Our virtual setUp for out tests"""  # This function is useful, as it can test our queries without changing the databsae
 
         # Homepages sessions
-        self.client.session = ''
+        self.client.session.update({
+            'cart_items': {
+                '1m': {
+                    'id': 1,
+                    'name': "One Piece Hat",
+                    'image': "homepages/static/images/one_piece_hat.jpg",
+                    'price': 8000,                
+                    'discount': 25.00,
+                    'discount_active': True,
+                    'size': "m",
+                    'quantity': 10,
+                }
+            }
+        })
 
         # Homepages urls
         self.single_url = reverse('homepages:single', args=[1])
@@ -63,6 +76,8 @@ class TestViews(TestCase):
         self.cart_url = reverse('homepages:cart')
         self.add_cart_url = reverse('homepages:add_cart', args=[1])
         self.add_cart_error_url = reverse('homepages:add_cart', args=[100])
+        self.remove_cart_item_url_error = reverse('homepages:remove_cart_item', args=['rauan'])
+        self.remove_cart_item_url = reverse('homepages:remove_cart_item', args=['1m'])
 
         # Homepages models
         product_category.objects.create(
@@ -115,9 +130,15 @@ class TestViews(TestCase):
         response = self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
         self.assertEqual(response.status_code, 302)
 
+    def test_remove_cart_item_views_with_error(self):
+        """Testing remove_cart_item's view function with error"""
+        response = self.client.get(self.remove_cart_item_url_error)
+        self.assertEqual(response.status_code, 404)
+    
     def test_remove_cart_item_views(self):
         """Testing remove_cart_item's view function"""
+        response = self.client.get(self.remove_cart_item_url)
+        self.assertEqual(response.status_code, 200)
 
-    
     def test_update_total(self):
         """"Testing udpate_total's view function"""
