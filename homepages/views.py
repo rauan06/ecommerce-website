@@ -50,8 +50,8 @@ def cart(request):
         for values in request.session['cart_items']:
             # Calculate total price considering discounts
             if request.session['cart_items'][values]['discount_active']:
-                total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
-                       - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
+                total += int((int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
+                       - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100))/10)*10
             else:
                 total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
         return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
@@ -101,12 +101,12 @@ def remove_cart_item(request, key):
         request.session['quantity'] -= request.session['cart_items'][key]['quantity']
         del request.session['cart_items'][key]
         request.session.modified = True
-        return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
+        return HttpResponseRedirect(reverse('homepages:update_total', args=[key]))
     # Else return cart without any changes
     else:
         # Check if the cart had items or not 
         if 'cart_items' in request.session:
-            return render(request, 'cart.html', {'cart_items': request.session['cart_items']})
+            return HttpResponseRedirect(reverse('homepages:update_total', args=[key]))
         else:
             return render(request, 'cart.html', {'cart_items': ''})
 
@@ -127,8 +127,8 @@ def update_total(request, key):
             # Recalculate total price considering discounts
             for values in request.session['cart_items']:
                 if request.session['cart_items'][values]['discount_active']:
-                    total += int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
-                           - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100)
+                    total += int((int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
+                           - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100))/10)*10
                 else:
                     total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
 
