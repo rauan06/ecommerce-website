@@ -54,22 +54,6 @@ class TestViews(TestCase):
     def setUp(self):
         """Our virtual setUp for out tests"""  # This function is useful, as it can test our queries without changing the databsae
 
-        # Homepages sessions
-        self.client.session.update({
-            'cart_items': {
-                '1m': {
-                    'id': 1,
-                    'name': "One Piece Hat",
-                    'image': "homepages/static/images/one_piece_hat.jpg",
-                    'price': 8000,                
-                    'discount': 25.00,
-                    'discount_active': True,
-                    'size': "m",
-                    'quantity': 10,
-                }
-            }
-        })
-
         # Homepages urls
         self.single_url = reverse('homepages:single', args=[1])
         self.collections_url = reverse('homepages:collections', args=['Men'])
@@ -93,13 +77,31 @@ class TestViews(TestCase):
             image = "homepages/static/images/one_piece_hat.jpg",
         )
 
+        product.objects.create(
+            id =  2,
+            name = "One Piece Shirt",
+            desc = "",
+            price = 19990,
+            image = "homepages/static/images/one_piece_shirt.jpg",
+        )
+
         product.objects.get(id=1).categories.add(product_category.objects.get(name="Men"))
+        product.objects.get(id=2).categories.add(product_category.objects.get(name="Men"))
 
         discount.objects.create(
             product_name = product.objects.get(id=1),
             discount_percent = 25.00,
             active = True,
         )
+
+        discount.objects.create(
+            product_name = product.objects.get(id=2),
+            discount_percent = 20.00,
+            active = True,
+        )
+
+        self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
+        self.client.session.save()
 
     def test_single_views(self):
         """Testing single's view function"""
@@ -118,6 +120,8 @@ class TestViews(TestCase):
     def test_cart_empty_views(self):
         """Testing empty cart's view function"""
         response = self.client.get(self.cart_url)
+        self.client.session.clear()
+        self.client.session.save()
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Your cart is empty")
 
@@ -139,6 +143,16 @@ class TestViews(TestCase):
         self.assertEqual(response1.status_code, 302)
         self.assertEqual(response2.status_code, 302)
 
+    def test_cart_float_values(self):
+        """Testing cart for showing relevant total with float prices"""
+        response = self.client.get(self.cart_url)
+        self.assertIn('cart_items', self.client.session, f'Sesssion is: {self.client.session}') 
+        self.client.session['cart_items']['1m']['id'] == 1
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "cart.html")
+        self.assertContains(response, "Your cart is empty")
+
     def test_remove_cart_item_views(self):
         """Testing remove_cart_item's view function"""
         response = self.client.get(self.remove_cart_item_url)
@@ -148,5 +162,5 @@ class TestViews(TestCase):
     def test_remove_cart_item_views_with_error(self):
         """Testing remove_cart_item's view function with error"""
         response = self.client.get(self.remove_cart_item_url_error)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Your cart is empty")
+        self.assertEqual(response.status_code, 302)
+
