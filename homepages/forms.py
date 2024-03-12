@@ -8,6 +8,12 @@ class Cart(forms.Form):
     sizes = forms.ChoiceField(required=True, label="",  label_suffix=" ", widget=forms.RadioSelect(), choices=SIZE_CHOICES) # Radio Select Field
     quantity = forms.IntegerField(label=" ",  label_suffix=" ", widget=forms.NumberInput(), min_value=1, max_value=100)
 
+
+class UpdateTotal(forms.Form):
+    """Form for views.update_total"""
+    quantity = forms.IntegerField(label=" ",  label_suffix=" ", widget=forms.NumberInput(), min_value=1, max_value=100)
+    
+
 # class EntryForm(forms.ModelForm):
 #     class Meta:
 #         model = Entry

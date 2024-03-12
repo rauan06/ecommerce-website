@@ -39,7 +39,6 @@
                   <form method="get" action="{% url 'homepages:update_total' key %}">
                     {% csrf_token %}
                   <td>
-                      {{ update_form.errors }}
                       <input type="number" name="quantity" value="{{ value.quantity }}" min="1" max="100" class="form-control form-control-sm" style="width: 80px">
                   </td>
                   <td class="text-right">

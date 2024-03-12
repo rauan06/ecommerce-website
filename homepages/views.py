@@ -2,18 +2,10 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from .models import product, product_category
-from .forms import Cart
+from .forms import Cart, UpdateTotal
 # from django.contrib.auth import logout
 
 # Create your views here.
-
-def remove_all_cart_items(request):
-    """Logs out the user by deleting all sessions"""
-    del request.session['cart_items']
-    del request.session['quantity']
-    request.session.modified = True
-    return HttpResponseRedirect(reverse('homepages:cart'))
-
 def index(request):
     """Shows last 10 modified products"""
     products = product.objects.all().order_by('-modified_at')[:10]
@@ -85,6 +77,7 @@ def add_cart(request, product_id):
                     'discount_active': item.discount.active,
                     'size': request.GET['sizes'],
                     'quantity': int(request.GET['quantity']),
+                    # 'update_total' : UpdateTotal(),
                 }
                 request.session['quantity'] += int(request.GET['quantity'])
             request.session['cart_items'] = cart_items  # Update cart_items in session
@@ -113,11 +106,16 @@ def remove_cart_item(request, key):
 
 def update_total(request, key):
     """Updates the total price of the cart"""
-    if request.method != 'GET':
-        return render(request, 'cart.html')
+    try:
+        int(request.GET['quantity'])
+    except ValueError:
+        return HttpResponseRedirect(reverse('homepages:cart'))
     else:
         if 'cart_items' in request.session and key in request.session['cart_items']:
             # Update quantity and total price
+            if int(request.GET['quantity']) == 0:
+                return HttpResponseRedirect(reverse('homepages:remove_cart_item', args=[key]))
+            
             request.session['quantity'] -= int(request.session['cart_items'][key]['quantity'])
             request.session['cart_items'][key]['quantity'] = abs(int(request.GET['quantity']))
             request.session['quantity'] += abs(int(request.GET['quantity']))
@@ -135,4 +133,10 @@ def update_total(request, key):
             return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
         
         return HttpResponseRedirect(reverse('homepages:cart'))
-    
+
+def remove_all_cart_items(request):
+    """Logs out the user by deleting all sessions"""
+    del request.session['cart_items']
+    del request.session['quantity']
+    request.session.modified = True
+    return HttpResponseRedirect(reverse('homepages:cart'))
