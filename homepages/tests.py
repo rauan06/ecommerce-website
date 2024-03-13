@@ -170,6 +170,7 @@ class TestViews(TestCase):
         for response in responses:
             self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(zero_response.status_code, 302)
         self.assertEqual(fail_response.status_code, 302)
         self.assertContains(fail_response_page, "600000")
 
@@ -177,7 +178,8 @@ class TestViews(TestCase):
             self.assertNotContains(response, "-600000")
             self.assertContains(response, "600000")
 
-        # self.assertContains(zero_response, 'Your cart is empty')
+        self.assertContains(self.client.get(self.client.get(self.update_total_url, \
+                    {'quantity': 0}, follow=True).redirect_chain[-1][0]), "empty")
 
     def test_remove_cart_item_views(self):
         """Testing remove_cart_item's view function"""

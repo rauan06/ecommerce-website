@@ -107,15 +107,13 @@ def remove_cart_item(request, key):
 def update_total(request, key):
     """Updates the total price of the cart"""
     try:
-        int(request.GET['quantity'])
+        if int(request.GET.get('quantity', 1)) == 0:
+            return HttpResponseRedirect(reverse('homepages:remove_cart_item', args=[key]))
     except ValueError:
         return HttpResponseRedirect(reverse('homepages:cart'))
     else:
         if 'cart_items' in request.session and key in request.session['cart_items']:
             # Update quantity and total price
-            if int(request.GET['quantity']) == 0:
-                return HttpResponseRedirect(reverse('homepages:remove_cart_item', args=[key]))
-            
             request.session['quantity'] -= int(request.session['cart_items'][key]['quantity'])
             request.session['cart_items'][key]['quantity'] = abs(int(request.GET['quantity']))
             request.session['quantity'] += abs(int(request.GET['quantity']))
