@@ -1,4 +1,6 @@
 Things to be done:
+    - Upload project to the Internet
+    - Manage static files
     - Add REST API, learn how it works
     - Integrate Google APIs.
     - Make decorators for checkout.
@@ -9,15 +11,12 @@ Things to be done:
     - Implement telegram, gmail bot to send information about order status.
     - Create robots.txt
     - Make statistics page.
-    - Check for security options on the internet
-    - Upload project to the Internet 
-
+    - Check for security options on the internet 
 
 Things in progress:
     - Create user authentication.
-    - Create checkout method.
     
-
 Things already done:
     - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
     - Create 'skip to the main content' button (when pressing 'tab').
+    - Upload project to the Internet

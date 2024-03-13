@@ -2,54 +2,53 @@
 {% load static %}
 {% load bootstrap5 %}
 {% load mathfilters %}
-
 {% block content %}
-    <!-- Product details -->
-    <section class="py-5" id ="main-content"> 
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center align-items-center">
-                <div class="col-lg-6 text-center text-lg-start">
-                    <img style="max-height:35em;"class="img-fluid" src="../{{ product.image|cut:"homepages/" }}" alt="{{ product.name }}">
-                </div>
-                <div class="col-lg-6">
-                    <div class="text">
-                        <h1 class="fw-bolder">{{ product.name }}</h1>
-                        <div class="d-flex justify-content-center justify-content-lg-start small text-warning mb-2"></div>
-                        {% if product.discount.active %}
-                                    <h2>{{ 100|sub:product.discount.discount_percent|mul:product.price|intdiv:1000|mul:10 }} &#8376; 
-                                        <span class="text-muted text-decoration-line-through">{{ product.price }} &#8376;</span></h2>
-                        {% else %}
-                            <h2>{{ product.price }} &#8376;</h2>
-                        {% endif %}
-                        <p class="lead"> {{ product.desc }}</p>
-                        <form action="{% url 'homepages:add_cart' product.id %}" method="get" class="row g-2 align-items-center">
-                            {% csrf_token %}
-
-                            {{ form.errors.sizes }}
-                            {{ form.errors.quantity }}
-                                    {% for field in form %}
-                                    <div class="col-auto">
-                                        {% if field.field.choices %}
-                                            <div class="btn-group" role="group">
-                                            {% for choice in field.field.choices %}
-                                                <input type="radio" id="{{choice.0}}" name="sizes" value="{{choice.0}}" class="btn-check" autocomplete="off" required>
-                                                <label class="btn btn-outline-dark" for="{{choice.0}}">{{choice.1}}</label>
-                                            {% endfor %}
-                                            </div>
-                                        </div>
-                                        {% else %}
-                                            <input type="number" name="quantity" class="form-control" value="1" min="1" max="100"style="width: 80px;">
-                                        </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <!-- Add more size buttons as needed -->
-                                    <div class="col-auto">
-                                        <button type="submit" class="btn btn-outline-dark">Add to cart</button>
-                                    </div>
-                        </form>
-                    </div>
-                </div>
+<!-- Product details -->
+<section class="py-5" id ="main-content">
+   <div class="container px-4 px-lg-5 mt-5">
+      <div class="row gx-4 gx-lg-5 justify-content-center align-items-center">
+         <div class="col-lg-6 text-center text-lg-start">
+            <img style="max-height:35em;"class="img-fluid" src="../{{ product.image|cut:"homepages/" }}" alt="{{ product.name }}">
+         </div>
+         <div class="col-lg-6">
+            <div class="text">
+               <h1 class="fw-bolder">{{ product.name }}</h1>
+               <div class="d-flex justify-content-center justify-content-lg-start small text-warning mb-2"></div>
+               {% if product.discount.active %}
+               <h2>{{ 100|sub:product.discount.discount_percent|mul:product.price|intdiv:1000|mul:10 }} &#8376; 
+                  <span class="text-muted text-decoration-line-through">{{ product.price }} &#8376;</span>
+               </h2>
+               {% else %}
+               <h2>{{ product.price }} &#8376;</h2>
+               {% endif %}
+               <p class="lead"> {{ product.desc }}</p>
+               <form action="{% url 'homepages:add_cart' product.id %}" method="get" class="row g-2 align-items-center">
+                  {% csrf_token %}
+                  {{ form.errors.sizes }}
+                  {{ form.errors.quantity }}
+                  {% for field in form %}
+                  <div class="col-auto">
+                     {% if field.field.choices %}
+                     <div class="btn-group" role="group">
+                        {% for choice in field.field.choices %}
+                        <input type="radio" id="{{choice.0}}" name="sizes" value="{{choice.0}}" class="btn-check" autocomplete="off" required>
+                        <label class="btn btn-outline-dark" for="{{choice.0}}">{{choice.1}}</label>
+                        {% endfor %}
+                     </div>
+                  </div>
+                  {% else %}
+                  <input type="number" name="quantity" class="form-control" value="1" min="1" max="100"style="width: 80px;">
             </div>
-        </div>
-    </section>
+            {% endif %}
+            {% endfor %}
+            <!-- Add more size buttons as needed -->
+            <div class="col-auto">
+            <button type="submit" class="btn btn-outline-dark">Add to cart</button>
+            </div>
+            </form>
+         </div>
+      </div>
+   </div>
+   </div>
+</section>
 {% endblock content %}

@@ -1,85 +1,83 @@
 {% extends 'base.html' %}
 {% load mathfilters %}
-
 {% block content %}
-  <section class="py-5 bg-light">
-    <div class="container px-4 px-lg-5 mt-5">
+<section class="py-5 bg-light">
+   <div class="container px-4 px-lg-5 mt-5">
       <div class="table-responsive" id ="main-content">
-        <table class="table table-striped table-hover">
-          {% if cart_items %}
+         <table class="table table-striped table-hover">
+            {% if cart_items %}
             <thead>
-              <tr>
-                <th scope="col" style="width: 400px;">Product</th>
-                <th scope="col" class="text-right">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col" class="text-right">Total</th>
-                <th scope="col">Actions</th>
-              </tr>
+               <tr>
+                  <th scope="col" style="width: 400px;">Product</th>
+                  <th scope="col" class="text-right">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col" class="text-right">Total</th>
+                  <th scope="col">Actions</th>
+               </tr>
             </thead>
             <tbody>
-              {% for key, value in cart_items.items %}
-                <tr>
+               {% for key, value in cart_items.items %}
+               <tr>
                   <td>
-                    <div class="d-flex align-items-center">
-                      <img src="../{{ value.image|cut:'homepages/' }}" alt="{{ value.name }}" style="height: 100px; object-fit: cover; margin-right: 10px;">
-                      <div class="text-left">
-                        <p class="mb-1">{{ value.name }}</p>
-                        <p class="text-muted mb-0">Size: {{ value.size|upper }}</p>
-                      </div>
-                    </div>
+                     <div class="d-flex align-items-center">
+                        <img src="../{{ value.image|cut:'homepages/' }}" alt="{{ value.name }}" style="height: 100px; object-fit: cover; margin-right: 10px;">
+                        <div class="text-left">
+                           <p class="mb-1">{{ value.name }}</p>
+                           <p class="text-muted mb-0">Size: {{ value.size|upper }}</p>
+                        </div>
+                     </div>
                   </td>
                   <td class="text-right">
-                    {% if value.discount_active %}
-                        {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|floatformat:2 }}
-                    {% else %}
-                      {{ value.price|floatformat:2 }}
-                    {% endif %}
-                    &#8376;
+                     {% if value.discount_active %}
+                     {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|floatformat:2 }}
+                     {% else %}
+                     {{ value.price|floatformat:2 }}
+                     {% endif %}
+                     &#8376;
                   </td>
-                  
                   <td>
-                    <form method="get" action="{% url 'homepages:update_total' key %}">
-                      {% csrf_token %}
-                      <input type="number" name="quantity" value="{{ value.quantity }}" min="1" max="100" class="form-control form-control-sm" style="width: 80px">
+                     <form method="get" action="{% url 'homepages:update_total' key %}">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ value.quantity }}" min="1" max="100" class="form-control form-control-sm" style="width: 80px">
                   </td>
                   <td class="text-right">
-                    {% if value.discount_active %}
-                        {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|mul:value.quantity|floatformat:2 }}
-                    {% else %}
-                      {{ value.price|mul:value.quantity|floatformat:2 }}
-                    {% endif %}
-                    &#8376;
+                  {% if value.discount_active %}
+                  {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|mul:value.quantity|floatformat:2 }}
+                  {% else %}
+                  {{ value.price|mul:value.quantity|floatformat:2 }}
+                  {% endif %}
+                  &#8376;
                   </td>
                   <td>
-                      <input type="submit" class="btn btn-sm btn-primary" value="Update total" />
-                      <a href="{% url 'homepages:remove_cart_item' key %}" class="btn btn-sm btn-danger">Remove</a>
+                  <input type="submit" class="btn btn-sm btn-primary" value="Update total" />
+                  <a href="{% url 'homepages:remove_cart_item' key %}" class="btn btn-sm btn-danger">Remove</a>
                   </td>
-                </tr>
-              </form>
-              {% endfor %}
+               </tr>
+               </form>
+               {% endfor %}
             </tbody>
             <tfoot>
-                <tr>
+               <tr>
                   <th colspan="2"></th>
                   <th class="text-right">Total:</th>
                   <th class="text-right">{{total|floatformat:2}} &#8376;</th>
                   <th class="text-right">
-                    <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-primary">Checkout</a>
-                    <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-danger">Remove all</a>
+                     <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-primary">Checkout</a>
+                     <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-danger">Remove all</a>
                   </th>
-                </tr>
-              </tfoot>
-          {% else %}
+               </tr>
+            </tfoot>
+            {% else %}
             <thead>
-              <tr>
-                <td colspan="5" class="text-center py-5">
-                  <h1>Your cart is empty</h1>
-                </td>
-              </tr>
+               <tr>
+                  <td colspan="5" class="text-center py-5">
+                     <h1>Your cart is empty</h1>
+                  </td>
+               </tr>
             </thead>
-          {% endif %}
-        </table>
+            {% endif %}
+         </table>
       </div>
-    </div>
-  </section>
+   </div>
+</section>
 {% endblock content %}
