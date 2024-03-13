@@ -54,7 +54,8 @@ class TestViews(TestCase):
     """Testing homepages for GET and POST methods"""
 
     def setUp(self):
-        """Our virtual setUp for out tests"""  # This function is useful, as it can test our queries without changing the databsae
+        """Our virtual setUp for out tests"""  
+        # This function is useful, as it can test our queries without changing the databsae
 
         # Homepages urls
         self.single_url = reverse('homepages:single', args=[1])
@@ -146,7 +147,6 @@ class TestViews(TestCase):
         response = self.client.get(self.add_cart_error_url)
         self.assertEqual(response.status_code, 404)
 
-    #
     def test_add_cart_GET(self):
         """Testing add_cart for GET"""
         response = self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
@@ -179,15 +179,21 @@ class TestViews(TestCase):
             self.assertContains(response, "600000")
 
         self.assertContains(self.client.get(self.client.get(self.update_total_url, \
-                    {'quantity': 0}, follow=True).redirect_chain[-1][0]), "empty")
+                    {'quantity': 0}, follow=True).redirect_chain[-1][0]), "Your cart is empty")
 
     def test_remove_cart_item_views(self):
         """Testing remove_cart_item's view function"""
         response = self.client.get(self.remove_cart_item_url)
         self.assertEqual(response.status_code, 302)
+        
+        self.assertContains(self.client.get(self.client.get(self.remove_cart_item_url, \
+                    follow=True).redirect_chain[-1][0]), "Your cart is empty")
+
 
     def test_remove_cart_item_views_with_error(self):
         """Testing remove_cart_item's view function with error"""
         response = self.client.get(self.remove_cart_item_url_error)
         self.assertEqual(response.status_code, 302)
 
+        self.assertContains(self.client.get(self.client.get(self.remove_cart_item_url_error, \
+                    follow=True).redirect_chain[-1][0]), "One Piece Hat")

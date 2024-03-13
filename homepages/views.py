@@ -42,10 +42,13 @@ def cart(request):
         for values in request.session['cart_items']:
             # Calculate total price considering discounts
             if request.session['cart_items'][values]['discount_active']:
-                total += int((int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
-                       - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100))/10)*10
+                total += int((int(request.session['cart_items'][values]['quantity']) * \
+                       (int(request.session['cart_items'][values]['price']) 
+                       -int(request.session['cart_items'][values]['price']) * \
+                        int(request.session['cart_items'][values]['discount']) / 100))/10)*10
             else:
-                total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
+                total += int(request.session['cart_items'][values]['quantity']) * \
+                         int(request.session['cart_items'][values]['price'])
         return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
     return render(request, 'cart.html', {'cart_items': ''})
 
@@ -61,7 +64,8 @@ def add_cart(request, product_id):
     else:
         form = Cart(request.GET)
         if form.is_valid():
-            cart_items = request.session.get('cart_items', {})  # Get cart_items from session or create an empty dict
+            cart_items = request.session.get('cart_items', {})  
+            # Get cart_items from session or create an empty dict
             if str(product_id) + request.GET['sizes'] in cart_items:
                 # If the same product in the same size is added again, increase its quantity
                 cart_items[str(product_id) + request.GET['sizes']]['quantity'] += int(request.GET['quantity'])
@@ -123,10 +127,13 @@ def update_total(request, key):
             # Recalculate total price considering discounts
             for values in request.session['cart_items']:
                 if request.session['cart_items'][values]['discount_active']:
-                    total += int((int(request.session['cart_items'][values]['quantity']) * (int(request.session['cart_items'][values]['price']) 
-                           - int(request.session['cart_items'][values]['price']) * int(request.session['cart_items'][values]['discount']) / 100))/10)*10
+                    total += int((int(request.session['cart_items'][values]['quantity']) * \
+                        (int(request.session['cart_items'][values]['price']) 
+                        - int(request.session['cart_items'][values]['price']) * \
+                        int(request.session['cart_items'][values]['discount']) / 100))/10)*10
                 else:
-                    total += int(request.session['cart_items'][values]['quantity']) * int(request.session['cart_items'][values]['price'])
+                    total += int(request.session['cart_items'][values]['quantity']) * \
+                        int(request.session['cart_items'][values]['price'])
 
             return render(request, 'cart.html', {'cart_items': request.session['cart_items'], 'total': total})
         
