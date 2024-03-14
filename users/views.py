@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your views here.
 def login(request):
