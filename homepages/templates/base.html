@@ -45,12 +45,18 @@
                   </li>
                </ul>
                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                     <a class="nav-link active" href="{% url 'users:login' %}">Login</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link active" href="{% url 'users:register' %}">Register</a>
-                  </li>
+                    {% if user.is_authenticated %}
+                     <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'users:logout_view' %}">Logout</a>
+                     </li>
+                    {% else %}
+                     <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'users:login' %}">Login</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'users:register' %}">Register</a>
+                     </li>
+                    {% endif %}
                </ul>
                <form class="d-flex" action="{% url 'homepages:cart' %}" method="get">
                   {% csrf_token %}

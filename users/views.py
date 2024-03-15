@@ -1,34 +1,30 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
+from .forms import UserRegisterForm
 from django.urls import reverse
-from django.contrib.auth.models import User
+
 
 # Create your views here.
-def login(request):
-    
-    return render(request, 'login.html')
-
-def logout_view(requset):
-    logout(requset)
-    return render(requset, "homepages/templates/index.hmtl")
-
 def register(request):
-    """Register a new user"""
-    if request.method != 'POST':
-        # Display registration form
-        form = UserCreationForm()
-    else:
-        """Form was filled"""
-        form = UserCreationForm(data=request.POST)
-
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
-            # Log the user in and rediret to home page
-            auth_user = authenticate(username=new_user.username, password=request.POST['password1'])
+            instance = form.save() #form
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            email = request.POST.get('email')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            instance.email = email
+            instance.first_name = first_name
+            instance.last_name = last_name
+            instance.save()
+            form.save_m2m()
+            auth_user = authenticate(username=username, password=password)
             login(request, auth_user)
-            return HttpResponseRedirect(reverse('homepages:index'))
+            return HttpResponseRedirect(reverse('learning_logs:index'))
+    else: form = UserRegisterForm()
 
-    context = {'form' : form}
+    context = {'form': form}
     return render(request, 'register.html', context)

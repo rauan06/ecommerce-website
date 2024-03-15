@@ -12,7 +12,7 @@
               <div class="card shadow-sm">
                 <div class="card-body">
                   <h2 class="text-center mb-4">Register</h2>
-                  <form id="main-content" action="{% url 'users:login' %}" method="post">
+                  <form id="main-content" action="{% url 'users:register' %}" method="post">
                     {% csrf_token %}
                     <div class="mb-3">
                       <label for="first_name" class="form-label">First name</label>
@@ -25,8 +25,13 @@
                       {{ form.last_name.errors }}
                     </div>
                     <div class="mb-3">
+                      <label for="username" class="form-label">Username</label>
+                      <input type="text" class="form-control" id="username" name="username" required>
+                      {{ form.username.errors }}
+                    </div>
+                    <div class="mb-3">
                       <label for="email" class="form-label">Email</label>
-                      <input type="email" class="form-control" id="email" required>
+                      <input type="email" class="form-control" id="email" name="email" required>
                       {{ form.email.errors }}
                     </div>
                     <div class="mb-3"> 
