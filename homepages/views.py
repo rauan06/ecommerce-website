@@ -2,10 +2,12 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from .models import product, product_category
-from .forms import Cart, UpdateTotal
+from .forms import Cart
+from django.contrib.auth.decorators import login_required
 # from django.contrib.auth import logout
 
 # Create your views here.
+
 def index(request):
     """Shows last 10 modified products"""
     products = product.objects.all().order_by('-modified_at')[:10]
@@ -33,7 +35,7 @@ def collections(request, category_name):
 
     return render(request, 'collections.html', context)
 
-
+@login_required
 def cart(request):
     """Displays the items stored in the cart session"""
     if 'cart_items' in request.session:
@@ -53,6 +55,7 @@ def cart(request):
     return render(request, 'cart.html', {'cart_items': ''})
 
 
+@login_required
 def add_cart(request, product_id):
     """Adds items to the cart session"""
     item = get_object_or_404(product, id=product_id)
@@ -90,7 +93,7 @@ def add_cart(request, product_id):
     context = {'product': item, 'form': form}
     return render(request, 'single.html', context)
 
-
+@login_required
 def remove_cart_item(request, key):
     """Removes an item from the cart session"""
     # Check if the key is in the request session
@@ -107,7 +110,7 @@ def remove_cart_item(request, key):
         else:
             return render(request, 'cart.html', {'cart_items': ''})
 
-
+@login_required
 def update_total(request, key):
     """Updates the total price of the cart"""
     try:
@@ -139,6 +142,7 @@ def update_total(request, key):
         
         return HttpResponseRedirect(reverse('homepages:cart'))
 
+@login_required
 def remove_all_cart_items(request):
     """Logs out the user by deleting all sessions"""
     del request.session['cart_items']

@@ -14,9 +14,12 @@ Things to be done:
     - Check for security options on the internet 
 
 Things in progress:
-    - Create user authentication.
+    - Make purchases available only for users
+    - Update tests for homapge
+    - Create tests for user authentication.
     
 Things already done:
     - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
     - Create 'skip to the main content' button (when pressing 'tab').
     - Upload project to the Internet
+    - Create user authentication.
