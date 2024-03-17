@@ -151,7 +151,7 @@ def update_total(request, key):
         return HttpResponseRedirect(reverse('homepages:cart'))
 
 def remove_all_cart_items(request):
-    """Logs out the user by deleting all sessions"""
+    """Deleting all cart sessions"""
     del request.session['cart_items']
     del request.session['quantity']
     request.session.modified = True
