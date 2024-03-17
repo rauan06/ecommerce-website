@@ -30,6 +30,8 @@ def checkout(request):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("homepages:index"))
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -43,4 +45,3 @@ def register(request):
 
     context = {'form': form}
     return render(request, 'register.html', context)
-
