@@ -191,7 +191,6 @@ class TestViews(TestCase):
         self.assertContains(self.client.get(self.client.get(self.remove_cart_item_url, \
                     follow=True).redirect_chain[-1][0]), "Your cart is empty")
 
-
     def test_remove_cart_item_views_with_error(self):
         """Testing remove_cart_item's view function with error"""
         response = self.client.get(self.remove_cart_item_url_error)
@@ -199,3 +198,4 @@ class TestViews(TestCase):
 
         self.assertContains(self.client.get(self.client.get(self.remove_cart_item_url_error, \
                     follow=True).redirect_chain[-1][0]), "One Piece Hat")
+    
