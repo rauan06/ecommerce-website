@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load mathfilters %}
+
+{% block content %}
+
+<section class="py-5 bg-light">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5">
+      <div class="col-md-8 order-md-1">
+        <h2 class="mb-3">Review Your Order</h2>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="text-muted">Your Cart</h4>
+          <a href="{% url 'homepages:cart' %}" class="text-decoration-none text-muted">Edit Items</a>
+        </div>
+        {% for item in cart_items %}
+        <div class="card mb-3 shadow-sm">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img src="{{ item.product.image|cut:'homepages/' }}" class="img-fluid rounded-start" alt="..." style="max-width: 100px;">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ item.product.name }}</h5>
+                <p class="card-text">Quantity: {{ item.quantity }} | Price: ${{ item.product.price|mul:item.quantity }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-md-4 order-md-0">
+        <h2 class="mb-3">Billing & Shipping</h2>
+        <form>
+          <div class="mb-3">
+            <label for="billingName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="billingName" required>
+          </div>
+          <div class="mb-3">
+            <label for="billingEmail" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="billingEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="billingAddress" class="form-label">Billing Address</label>
+            <input type="text" class="form-control" id="billingAddress" required>
+          </div>
+          <div class="mb-3">
+            <label for="billingCity" class="form-label">City</label>
+            <input type="text" class="form-control" id="billingCity" required>
+          </div>
+          <div class="mb-3">
+            <label for="billingState" class="form-label">State</label>
+            <select class="form-select" id="billingState" required>
+              <option value="">Select State</option>
+              <option value="AL">Alabama</option>
+              </select>
+          </div>
+          <div class="mb-3">
+            <label for="billingZip" class="form-label">Zip Code</label>
+            <input type="text" class="form-control" id="billingZip" required>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Place Order</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

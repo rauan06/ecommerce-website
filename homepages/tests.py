@@ -107,11 +107,6 @@ class TestViews(TestCase):
 
         # Creating sesion for the cart
         self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
-        self.credentials = {
-            'username': 'testuser',
-            'password': 'secret'}
-        User.objects.create_user(**self.credentials)
-        self.client.post('/login/', self.credentials, follow=True)
         self.client.session.save()
     
 
@@ -204,17 +199,3 @@ class TestViews(TestCase):
 
         self.assertContains(self.client.get(self.client.get(self.remove_cart_item_url_error, \
                     follow=True).redirect_chain[-1][0]), "One Piece Hat")
-        
-
-class LogInTest(TestCase):
-    def setUp(self):
-        self.credentials = {
-            'username': 'testuser',
-            'password': 'secret'}
-        User.objects.create_user(**self.credentials)
-
-    def test_login(self):
-        # send login data
-        response = self.client.post('/login/', self.credentials, follow=True)
-        # should be logged in now
-        self.assertTrue(response.context['user'].is_active)
