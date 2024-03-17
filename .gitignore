@@ -151,3 +151,4 @@ dmypy.json
 cython_debug/
 
 .vscode/
+migrations
