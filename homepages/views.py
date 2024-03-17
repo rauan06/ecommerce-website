@@ -43,10 +43,17 @@ def cart(request):
         for values in request.session['cart_items']:
             # Calculate total price considering discounts
             if request.session['cart_items'][values]['discount_active']:
-                total += int((int(request.session['cart_items'][values]['quantity']) * \
-                       (int(request.session['cart_items'][values]['price']) 
-                       -int(request.session['cart_items'][values]['price']) * \
-                        int(request.session['cart_items'][values]['discount']) / 100))/10)*10
+                if request.session['cart_items'][values]['discount_active']:
+                    # Round down the price to the nearest multiple of 10
+                    rounded_price = round(round(request.session['cart_items'][values]['price'], -1) 
+                                          - round(request.session['cart_items'][values]['price'], -1) 
+                                          * request.session['cart_items'][values]['discount'] / 100, -1) 
+
+                    # Calculate the total with the rounded price
+                    total += int(int(request.session['cart_items'][values]['quantity']) * rounded_price )
+                else:
+                    total += int(request.session['cart_items'][values]['quantity']) * \
+                        int(request.session['cart_items'][values]['price'])
             else:
                 total += int(request.session['cart_items'][values]['quantity']) * \
                          int(request.session['cart_items'][values]['price'])
@@ -128,10 +135,13 @@ def update_total(request, key):
             # Recalculate total price considering discounts
             for values in request.session['cart_items']:
                 if request.session['cart_items'][values]['discount_active']:
-                    total += int((int(request.session['cart_items'][values]['quantity']) * \
-                        (int(request.session['cart_items'][values]['price']) 
-                        - int(request.session['cart_items'][values]['price']) * \
-                        int(request.session['cart_items'][values]['discount']) / 100))/10)*10
+                    # Round down the price to the nearest multiple of 10
+                    rounded_price = round(round(request.session['cart_items'][values]['price'], -1) 
+                                          - round(request.session['cart_items'][values]['price'], -1) 
+                                          * request.session['cart_items'][values]['discount'] / 100, -1) 
+
+                    # Calculate the total with the rounded price
+                    total += int(int(request.session['cart_items'][values]['quantity']) * rounded_price )
                 else:
                     total += int(request.session['cart_items'][values]['quantity']) * \
                         int(request.session['cart_items'][values]['price'])

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load mathfilters %}
 {% block content %}
+
 <section class="py-5 bg-light">
    <div class="container px-4 px-lg-5 mt-5">
       <div class="table-responsive" id ="main-content">
@@ -29,9 +30,9 @@
                   </td>
                   <td class="text-right">
                      {% if value.discount_active %}
-                     {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|floatformat:2 }}
+                        {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|floatformat:2 }}
                      {% else %}
-                     {{ value.price|floatformat:2 }}
+                        {{ value.price|floatformat:2 }}
                      {% endif %}
                      &#8376;
                   </td>
@@ -42,9 +43,9 @@
                   </td>
                   <td class="text-right">
                   {% if value.discount_active %}
-                  {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|mul:value.quantity|floatformat:2 }}
+                     {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|mul:value.quantity|floatformat:2 }}
                   {% else %}
-                  {{ value.price|mul:value.quantity|floatformat:2 }}
+                     {{ value.price|mul:value.quantity|floatformat:2 }}
                   {% endif %}
                   &#8376;
                   </td>
@@ -62,7 +63,7 @@
                   <th class="text-right">Total:</th>
                   <th class="text-right">{{total|floatformat:2}} &#8376;</th>
                   <th class="text-right">
-                     <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-primary">Checkout</a>
+                     <a href="{% url 'users:checkout' %}" class="btn btn-sm btn-primary">Checkout</a>
                      <a href="{% url 'homepages:remove_all_cart_items' %}" class="btn btn-sm btn-danger">Remove all</a>
                   </th>
                </tr>

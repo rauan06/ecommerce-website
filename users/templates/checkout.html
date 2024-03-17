@@ -14,16 +14,21 @@
           <h4 class="text-muted">Your Cart</h4>
           <a href="{% url 'homepages:cart' %}" class="text-decoration-none text-muted">Edit Items</a>
         </div>
-        {% for item in cart_items %}
+        {% for key, value in cart_items.items %}
         <div class="card mb-3 shadow-sm">
           <div class="row g-0">
             <div class="col-md-4">
-              <img src="{{ item.product.image|cut:'homepages/' }}" class="img-fluid rounded-start" alt="..." style="max-width: 100px;">
+              <img src="../../{{ value.image|cut:'homepages/' }}" class="img-fluid rounded-start" alt="..." style="max-width: 100px;">
             </div>
             <div class="col-md-8">
               <div class="card-body">
-                <h5 class="card-title">{{ item.product.name }}</h5>
-                <p class="card-text">Quantity: {{ item.quantity }} | Price: ${{ item.product.price|mul:item.quantity }}</p>
+                <h5 class="card-title">{{ value.name }}</h5>
+                <p class="card-text">Quantity: {{ value.quantity }} | Price: 
+                  {% if value.discount_active %}
+                     {{ 100|sub:value.discount|mul:value.price|intdiv:1000|mul:10|mul:value.quantity|floatformat:2 }}
+                  {% else %}
+                     {{ value.price|mul:value.quantity|floatformat:2 }}
+                  {% endif %}</p>
               </div>
             </div>
           </div>
@@ -53,7 +58,7 @@
             <label for="billingState" class="form-label">State</label>
             <select class="form-select" id="billingState" required>
               <option value="">Select State</option>
-              <option value="AL">Alabama</option>
+              <option value="KZ">Kazakhstan</option>
               </select>
           </div>
           <div class="mb-3">

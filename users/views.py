@@ -1,8 +1,8 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm
 from django.urls import reverse
 
 
@@ -15,36 +15,31 @@ def checkout(request):
         for values in request.session['cart_items']:
             # Calculate total price considering discounts
             if request.session['cart_items'][values]['discount_active']:
-                total += int((int(request.session['cart_items'][values]['quantity']) * \
-                       (int(request.session['cart_items'][values]['price']) 
-                       -int(request.session['cart_items'][values]['price']) * \
-                        int(request.session['cart_items'][values]['discount']) / 100))/10)*10
+                # Round down the price to the nearest multiple of 10
+                rounded_price = round(round(request.session['cart_items'][values]['price'], -1) 
+                             - round(request.session['cart_items'][values]['price'], -1) 
+                              * request.session['cart_items'][values]['discount'] / 100, -1) 
+                # Calculate the total with the rounded price
+                total += int(int(request.session['cart_items'][values]['quantity']) * rounded_price )
             else:
                 total += int(request.session['cart_items'][values]['quantity']) * \
-                         int(request.session['cart_items'][values]['price'])
+                int(request.session['cart_items'][values]['price'])
+        print(request.session['cart_items'])       
         return render(request, 'checkout.html', {'cart_items': request.session['cart_items'], 'total': total})
-    return render(request, 'checkout.html', {'cart_items': ''})
+    raise Http404
 
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            instance = form.save() #form
+            form.save()
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            email = request.POST.get('email')
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            instance.email = email
-            instance.first_name = first_name
-            instance.last_name = last_name
-            instance.save()
-            form.save_m2m()
             auth_user = authenticate(username=username, password=password)
             login(request, auth_user)
-            return HttpResponseRedirect(reverse('learning_logs:index'))
-    else: form = UserRegisterForm()
+            return HttpResponseRedirect(reverse('homepages:index'))
+    else: form = UserCreationForm()
 
     context = {'form': form}
     return render(request, 'register.html', context)
