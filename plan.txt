@@ -1,25 +1,25 @@
 Things to be done:
-    - Upload project to the Internet
-    - Manage static files
-    - Add REST API, learn how it works
+    - Implement payment methods.
+    - Manage static files.
+    - Add REST API, learn how it works.
     - Integrate Google APIs.
     - Make decorators for checkout.
     - Create Admin Panel.
     - Cretate decorators for Admin Panel.
     - Create order list.
-    - Implement payment methods.
     - Implement telegram, gmail bot to send information about order status.
     - Create robots.txt
     - Make statistics page.
-    - Check for security options on the internet 
+    - Check for security options on the internet.
 
 Things in progress:
-    - Make purchases available only for users
-    - Update tests for homapge
     - Create tests for user authentication.
     
 Things already done:
+    - Upload project to the Internet.
     - Create tests for cart and fix bugs with 3 view functions assosioated with cart.
     - Create 'skip to the main content' button (when pressing 'tab').
-    - Upload project to the Internet
+    - Upload project to the Internet.
     - Create user authentication.
+    - Make purchases available only for users.
+    - Update tests for homapge.

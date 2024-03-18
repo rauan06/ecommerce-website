@@ -16,6 +16,7 @@ class TestAuth(TestCase):
             password='testpass',
         )
 
+    # CONTINUE TOMORROW
     # def test_register(self):
     #     response = self.client.post(self.url_register, {'username':'testuser', 'password1':'testpass','password2':'testpass'},
     #                                 follow=True)
