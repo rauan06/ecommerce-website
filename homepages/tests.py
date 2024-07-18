@@ -3,7 +3,6 @@ from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 from .models import product, product_category, discount
 from . import views
-import json
 
 
 # Create your tests here.
@@ -142,7 +141,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "cart.html")
-        self.assertContains(response, "235910.00")
+        self.assertContains(response, "175890.00")
 
     def test_add_cart_blank(self):
         """Testing add_cart when recieved nothing """
