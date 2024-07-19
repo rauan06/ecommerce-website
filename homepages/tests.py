@@ -55,9 +55,9 @@ class TestViews(TestCase):
 
     def setUp(self):
         """Our virtual setUp for out tests"""  
-        # This function is useful, as it can test our queries without changing the databsae
+        # Function to test our queries without changing the databsae
 
-        # Homepages urls
+        # Homepage urls
         self.single_url = reverse('homepages:single', args=[1])
         self.collections_url = reverse('homepages:collections', args=['Men'])
         self.cart_url = reverse('homepages:cart')
@@ -68,7 +68,7 @@ class TestViews(TestCase):
         self.update_total_url = reverse('homepages:update_total', args=['1m'])
         self.remove_cart_item_url = reverse('homepages:remove_cart_item', args=['1m'])
 
-        # Homepages models
+        # Homepage models
         product_category.objects.create(
             name="Men"
         )
@@ -104,7 +104,7 @@ class TestViews(TestCase):
             active=True,
         )
 
-        # Creating sesion for the cart
+        # Creating session for the cart
         self.client.get(self.add_cart_url, {"sizes": "m", "quantity": "10"})
         self.client.session.save()
     
